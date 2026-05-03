@@ -1,12 +1,295 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PlayReadyLearn — Let's Play!</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PlayReadyLearn — Let's Play!</title>
+  <meta name="description" content="AI-powered activity ideas for children 6 months to 4 years. Simple, fun, and educational activities for busy parents." />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Georgia', serif; background: #FFFDE7; color: #333; }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      background: #1565C0;
+      color: #fff;
+    }
+    .logo { font-size: 24px; font-weight: bold; color: #FDD835; }
+    .nav-btn {
+      padding: 10px 24px;
+      background: #E53935;
+      color: #fff;
+      border: none;
+      border-radius: 25px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .hero {
+      background: linear-gradient(180deg, #E3F2FD 0%, #FFFDE7 100%);
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .circle-frame {
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #81C784, #4FC3F7);
+      border: 8px solid #FDD835;
+      margin: 0 auto 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 60px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .circle-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .circle-emoji {
+      font-size: 40px;
+      filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.2));
+    }
+
+    .tagline {
+      font-size: clamp(36px, 7vw, 72px);
+      font-weight: bold;
+      color: #1565C0;
+      margin-bottom: 12px;
+      line-height: 1.1;
+    }
+
+    .tagline span { color: #E53935; }
+
+    .subtitle {
+      font-size: 18px;
+      color: #555;
+      max-width: 500px;
+      margin: 0 auto 32px;
+      line-height: 1.6;
+    }
+
+    .hero-btn {
+      display: inline-block;
+      padding: 18px 48px;
+      background: #E53935;
+      color: #fff;
+      border-radius: 50px;
+      font-size: 20px;
+      font-weight: bold;
+      text-decoration: none;
+      box-shadow: 0 4px 16px rgba(229,57,53,0.4);
+      transition: transform 0.2s;
+    }
+    .hero-btn:hover { transform: translateY(-3px); }
+
+    .age-section {
+      padding: 60px 20px;
+      background: #fff;
+      text-align: center;
+    }
+    .age-section h2 { font-size: 32px; color: #1565C0; margin-bottom: 8px; }
+    .age-section p { color: #666; font-size: 16px; margin-bottom: 40px; }
+
+    .age-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 16px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .age-card {
+      border-radius: 20px;
+      padding: 24px 16px;
+      text-align: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    }
+
+    .age-card .emoji { font-size: 40px; margin-bottom: 8px; }
+    .age-card .age { font-size: 14px; font-weight: bold; color: #333; }
+
+    .features {
+      padding: 60px 20px;
+      background: #E3F2FD;
+      text-align: center;
+    }
+    .features h2 { font-size: 32px; color: #1565C0; margin-bottom: 8px; }
+    .features p { color: #666; font-size: 16px; margin-bottom: 40px; }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 24px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .feature-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 32px 24px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    }
+
+    .feature-card .icon { font-size: 40px; margin-bottom: 12px; }
+    .feature-card h3 { font-size: 20px; color: #1565C0; margin-bottom: 8px; }
+    .feature-card p { color: #666; font-size: 15px; line-height: 1.6; }
+
+    .cta {
+      padding: 80px 20px;
+      background: #1565C0;
+      text-align: center;
+      color: #fff;
+    }
+    .cta h2 { font-size: 36px; margin-bottom: 12px; }
+    .cta p { font-size: 18px; color: #90CAF9; margin-bottom: 32px; }
+    .cta-btn {
+      display: inline-block;
+      padding: 18px 48px;
+      background: #FDD835;
+      color: #1565C0;
+      border-radius: 50px;
+      font-size: 20px;
+      font-weight: bold;
+      text-decoration: none;
+      box-shadow: 0 4px 16px rgba(253,216,53,0.4);
+    }
+
+    .contact {
+      padding: 60px 20px;
+      background: #fff;
+      text-align: center;
+    }
+    .contact h2 { font-size: 32px; color: #1565C0; margin-bottom: 12px; }
+    .contact p { color: #666; font-size: 16px; margin-bottom: 32px; }
+    .contact-btn {
+      display: inline-block;
+      padding: 16px 40px;
+      background: #E53935;
+      color: #fff;
+      border-radius: 50px;
+      font-size: 18px;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    footer {
+      background: #1565C0;
+      color: #90CAF9;
+      text-align: center;
+      padding: 32px 20px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">🌟 PlayReadyLearn</div>
+    <a href="#get-started" class="nav-btn">Let's Play! →</a>
+  </nav>
+
+  <section class="hero">
+    <div class="circle-frame">
+      <div class="circle-inner">
+        <div class="circle-emoji">🦋</div>
+        <div class="circle-emoji">🐸</div>
+        <div class="circle-emoji">🐦</div>
+        <div class="circle-emoji">🔭</div>
+        <div class="circle-emoji">🌸</div>
+        <div class="circle-emoji">🌿</div>
+        <div class="circle-emoji">🎠</div>
+        <div class="circle-emoji">🎒</div>
+      </div>
+    </div>
+    <h1 class="tagline">Let's <span>Play!</span></h1>
+    <p class="subtitle">
+      AI-powered activity ideas for children 6 months to 4 years. 
+      Simple, fun, and secretly educational — every day!
+    </p>
+    <a href="#get-started" class="hero-btn">✨ Get Activity Ideas →</a>
+  </section>
+
+  <section class="age-section">
+    <h2>Every Age. Every Stage.</h2>
+    <p>Activities designed specifically for your child's development level.</p>
+    <div class="age-grid">
+      <div class="age-card" style="background: #FFF9C4;">
+        <div class="emoji">👶</div>
+        <div class="age">6–12 Months</div>
+      </div>
+      <div class="age-card" style="background: #F3E5F5;">
+        <div class="emoji">🚼</div>
+        <div class="age">1–2 Years</div>
+      </div>
+      <div class="age-card" style="background: #E8F5E9;">
+        <div class="emoji">🧒</div>
+        <div class="age">2–3 Years</div>
+      </div>
+      <div class="age-card" style="background: #E3F2FD;">
+        <div class="emoji">👦</div>
+        <div class="age">3–4 Years</div>
+      </div>
+      <div class="age-card" style="background: #FFF3E0;">
+        <div class="emoji">🌟</div>
+        <div class="age">4–5 Years</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features">
+    <h2>What We Do</h2>
+    <p>Simple ideas that make every moment a learning moment.</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="icon">🌳</div>
+        <h3>Everyday Adventures</h3>
+        <p>Going to the park? The library? The garden? Get activity ideas for wherever you are!</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">🎨</div>
+        <h3>Creative Projects</h3>
+        <p>Simple crafts, games, and projects using everyday household items.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">📚</div>
+        <h3>Sneaky Learning</h3>
+        <p>Every activity builds early literacy, numbers, and motor skills — without feeling like school!</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta" id="get-started">
+    <h2>Ready to Play? 🌟</h2>
+    <p>Join parents who are making every day an adventure!</p>
+    <a href="https://app.playreadylearn.com" class="cta-btn">✨ Start Today →</a>
+  </section>
+
+  <section class="contact">
+    <h2>Questions?</h2>
+    <p>We'd love to hear from you!</p>
+    <a href="mailto:hello@transitionready.tech" class="contact-btn">📧 Contact Us</a>
+  </section>
+
+  <footer>
+    <p>© 2026 PlayReadyLearn — A Ready Learning LLC Product</p>
+    <p style="margin-top: 8px; font-size: 12px;">Making every day a learning adventure.</p>
+  </footer>
+
+</body>
 </html>
