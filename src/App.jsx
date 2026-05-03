@@ -54,7 +54,7 @@ export default function App() {
         <span style={{ fontSize: "32px" }}>🌟</span>
         <div>
           <h1 style={{ color: "#FDD835", fontSize: "24px", fontWeight: "bold", margin: 0 }}>
-            PlayReadyLearn
+             PlayReadyLearn
           </h1>
           <p style={{ color: "#90CAF9", fontSize: "13px", margin: 0 }}>
             Your AI activity guide for little ones!
