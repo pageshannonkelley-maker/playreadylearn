@@ -57,7 +57,7 @@ export default function App() {
              PlayReadyLearn
           </h1>
           <p style={{ color: "#90CAF9", fontSize: "13px", margin: 0 }}>
-            Your AI activity guide for little ones!
+             AI-powered activity ideas for children 6 months to 4 years.
           </p>
         </div>
       </div>
