@@ -39,7 +39,7 @@ export default function App() {
     <div style={{
       minHeight: "100vh",
       background: "#FFFDE7",
-      fontFamily: "Georgia, serif",
+      fontFamily: "Merriweather, bold",
       display: "flex",
       flexDirection: "column",
     }}>
