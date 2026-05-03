@@ -2,7 +2,7 @@ export default function App() {
   return (
     <div style={{ 
       minHeight: "100vh",
-      background: "#FFFDE7",
+      background: "#FFF1E7",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
