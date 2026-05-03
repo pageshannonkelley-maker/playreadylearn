@@ -1,8 +1,9 @@
-export default function App() {
-  return (
-    <div>
-      <h1>PlayReadyLearn</h1>
-      <p>Coming Soon!</p>
-    </div>
-  )
-}
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App'
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+)
