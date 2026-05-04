@@ -4,7 +4,7 @@ export default function App() {
   const [messages, setMessages] = useState([
     {
       role: "assistant",
-      content: "Hi! I'm Sunny! 🌟 I'm here to help you find fun activities for your little one. How old is your child?"
+      content: "Stop scrolling. Start soaking it in. What's within arm's reach?"
     }
   ]);
   const [input, setInput] = useState("");
