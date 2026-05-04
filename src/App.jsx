@@ -154,7 +154,7 @@ export default function App() {
             value={input}
             onChange={e => setInput(e.target.value)}
             onKeyDown={e => e.key === "Enter" && sendMessage()}
-            placeholder="Tell Sunny about your child..."
+            placeholder="Create our moment..."
             style={{
               flex: 1,
               padding: "12px 16px",
