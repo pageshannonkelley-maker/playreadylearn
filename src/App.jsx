@@ -54,7 +54,7 @@ export default function App() {
         <span style={{ fontSize: "32px" }}>🌟</span>
         <div>
           <h1 style={{ color: "#FDD835", fontSize: "24px", fontWeight: "bold", margin: 0 }}>
-             PlayReadyLearn
+             Play. Connect. Breathe.
           </h1>
           <p style={{ color: "#90CAF9", fontSize: "13px", margin: 0 }}>
              Simple, joyful activities to meet milestones and grow your bond. 0% prep. 100% love.
