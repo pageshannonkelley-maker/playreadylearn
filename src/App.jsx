@@ -1,18 +1,78 @@
 import { useState } from "react";
 
+const AGE_OPTIONS = [
+  "0-3 months old", "3-6 months old", "6-9 months old", "9-12 months old",
+  "1 year old", "18 months old", "2 years old", "3 years old", "4 years old", "5 years old"
+];
+
+const ITEM_OPTIONS = [
+  "Wooden Spoon", "Empty Boxes", "Blankets & Pillows", "Pots & Pans",
+  "Paper & Crayons", "Water & Cups", "Blocks", "Books", "Kitchen Items", "Nothing — just us!"
+];
+
+const ENERGY_OPTIONS = [
+  "Low Energy", "Medium Energy", "High Energy", "Need Something Calm", "Need Something Active"
+];
+
 export default function App() {
-  const [messages, setMessages] = useState([
-    {
-      role: "assistant",
-      content: "Stop scrolling. Start soaking it in. What's within arm's reach?"
-    }
-  ]);
-  const [input, setInput] = useState("");
+  const [age, setAge] = useState("");
+  const [item, setItem] = useState("");
+  const [energy, setEnergy] = useState("");
+  const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [showChat, setShowChat] = useState(false);
+  const [input, setInput] = useState("");
 
-  const sendMessage = async () => {
+  const COLORS = {
+    bg: "#F5F0E8",
+    border: "#B5956A",
+    button: "#8B7355",
+    text: "#3D2B1F",
+    lightText: "#6B5344",
+    white: "#FDFAF5",
+    accent: "#7A9E7E",
+  };
+
+  const handleCreate = async () => {
+    if (!age || !item || !energy) {
+      alert("Please fill in all three fields!");
+      return;
+    }
+
+    const prompt = `A parent needs a Right Now Moment activity. Here's their situation:
+- Child's age: ${age}
+- Item nearby: ${item}  
+- Parent's energy level: ${energy}
+
+Please suggest 2-3 simple, joyful activities they can do RIGHT NOW using what they have. Keep it warm, encouraging, and easy to follow.`;
+
+    setShowChat(true);
+    setLoading(true);
+    setMessages([{ role: "user", content: prompt }]);
+
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          messages: [{ role: "user", content: prompt }] 
+        }),
+      });
+      const data = await response.json();
+      const reply = data.content?.[0]?.text || "Let me think of something perfect for you!";
+      setMessages([
+        { role: "user", content: `Age: ${age} | Item: ${item} | Energy: ${energy}` },
+        { role: "assistant", content: reply }
+      ]);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const sendFollowUp = async () => {
     if (!input.trim()) return;
-
     const userMessage = { role: "user", content: input };
     const newMessages = [...messages, userMessage];
     setMessages(newMessages);
@@ -26,7 +86,7 @@ export default function App() {
         body: JSON.stringify({ messages: newMessages }),
       });
       const data = await response.json();
-      const reply = data.content?.[0]?.text || "Let me think of some ideas for you!";
+      const reply = data.content?.[0]?.text || "Here's another idea!";
       setMessages([...newMessages, { role: "assistant", content: reply }]);
     } catch (err) {
       console.error(err);
@@ -35,154 +95,263 @@ export default function App() {
     }
   };
 
+  const selectStyle = {
+    width: "100%",
+    padding: "10px 14px",
+    borderRadius: "8px",
+    border: `1px solid ${COLORS.border}`,
+    background: COLORS.white,
+    color: COLORS.text,
+    fontSize: "15px",
+    fontFamily: "Georgia, serif",
+    cursor: "pointer",
+    appearance: "auto",
+  };
+
+  const labelStyle = {
+    display: "block",
+    fontSize: "15px",
+    color: COLORS.text,
+    fontFamily: "Georgia, serif",
+    marginBottom: "6px",
+  };
+
   return (
     <div style={{
       minHeight: "100vh",
-      background: "#FFFDE7",
-      fontFamily: "Merriweather, bold",
-      display: "flex",
-      flexDirection: "column",
+      background: "#FAF7F2",
+      fontFamily: "Georgia, serif",
     }}>
-      {/* Header */}
-      <div style={{
-        background: "#1565C0",
-        padding: "16px 24px",
+      {/* Nav */}
+      <nav style={{
+        background: COLORS.button,
+        padding: "14px 32px",
         display: "flex",
+        justifyContent: "space-between",
         alignItems: "center",
-        gap: "12px",
       }}>
-        <span style={{ fontSize: "32px" }}>🌟</span>
-        <div>
-          <h1 style={{ color: "#FDD835", fontSize: "24px", fontWeight: "bold", margin: 0 }}>
-             Play. Connect. Breathe.
-          </h1>
-          <p style={{ color: "#90CAF9", fontSize: "13px", margin: 0 }}>
-             Simple, joyful activities to meet milestones and grow your bond. 0% prep. 100% love.
-          </p>
+        <span style={{ color: "#FFF8F0", fontSize: "22px", fontWeight: "bold" }}>
+          🌿 PlayReadyLearn
+        </span>
+        <span style={{ color: "#E8DCC8", fontSize: "13px" }}>
+          Simple moments. Big growth.
+        </span>
+      </nav>
+
+      {/* Hero */}
+      <div style={{
+        textAlign: "center",
+        padding: "40px 20px 20px",
+        background: "linear-gradient(180deg, #EDE8E0 0%, #FAF7F2 100%)",
+      }}>
+        <div style={{
+          width: "160px",
+          height: "160px",
+          borderRadius: "50%",
+          background: "linear-gradient(135deg, #A8C5A0, #C5B99A)",
+          border: `6px solid ${COLORS.border}`,
+          margin: "0 auto 20px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: "64px",
+          boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
+        }}>
+          🌸
         </div>
+        <h1 style={{ fontSize: "clamp(28px, 5vw, 48px)", color: COLORS.text, marginBottom: "8px" }}>
+          Simple, joyful activities
+        </h1>
+        <p style={{ fontSize: "18px", color: COLORS.lightText, marginBottom: "8px" }}>
+          to meet milestones and grow your bond.
+        </p>
+        <p style={{ fontSize: "14px", color: COLORS.lightText }}>
+          No prep. No mess. Just moments. ✨
+        </p>
       </div>
 
-      {/* Chat Messages */}
+      {/* Intake Box */}
       <div style={{
-        flex: 1,
-        maxWidth: "700px",
-        width: "100%",
-        margin: "0 auto",
-        padding: "24px 16px",
-        display: "flex",
-        flexDirection: "column",
-        gap: "16px",
+        maxWidth: "560px",
+        margin: "24px auto",
+        padding: "0 16px",
       }}>
-        {messages.map((msg, i) => (
-          <div key={i} style={{
-            display: "flex",
-            justifyContent: msg.role === "user" ? "flex-end" : "flex-start",
-            gap: "8px",
-            alignItems: "flex-start",
+        <div style={{
+          background: COLORS.bg,
+          border: `2px solid ${COLORS.border}`,
+          borderRadius: "16px",
+          padding: "32px",
+        }}>
+          <h2 style={{ fontSize: "22px", color: COLORS.text, marginBottom: "4px", fontWeight: "bold" }}>
+            Find a "Right Now" Moment
+          </h2>
+          <p style={{ fontSize: "13px", color: COLORS.lightText, marginBottom: "24px" }}>
+            (The AI Generator Intake)
+          </p>
+
+          <p style={{ fontSize: "15px", color: COLORS.text, marginBottom: "20px", lineHeight: "1.6" }}>
+            What does your "right now" look like?
+          </p>
+
+          <div style={{ display: "grid", gap: "16px" }}>
+            <div>
+              <label style={labelStyle}>My little one is</label>
+              <select value={age} onChange={e => setAge(e.target.value)} style={selectStyle}>
+                <option value="">Select age...</option>
+                {AGE_OPTIONS.map(a => <option key={a} value={a}>{a}</option>)}
+              </select>
+            </div>
+
+            <div>
+              <label style={labelStyle}>I have a</label>
+              <select value={item} onChange={e => setItem(e.target.value)} style={selectStyle}>
+                <option value="">Select nearby item...</option>
+                {ITEM_OPTIONS.map(i => <option key={i} value={i}>{i}</option>)}
+              </select>
+            </div>
+
+            <div>
+              <label style={labelStyle}>And honestly, I am feeling</label>
+              <select value={energy} onChange={e => setEnergy(e.target.value)} style={selectStyle}>
+                <option value="">Select energy level...</option>
+                {ENERGY_OPTIONS.map(e => <option key={e} value={e}>{e}</option>)}
+              </select>
+            </div>
+
+            <button
+              onClick={handleCreate}
+              disabled={loading}
+              style={{
+                padding: "14px",
+                borderRadius: "10px",
+                border: "none",
+                background: loading ? "#C4B49A" : COLORS.button,
+                color: "#FFF8F0",
+                fontSize: "16px",
+                fontWeight: "bold",
+                cursor: loading ? "not-allowed" : "pointer",
+                fontFamily: "Georgia, serif",
+                marginTop: "8px",
+              }}
+            >
+              {loading ? "Creating your moment... 🌿" : "Create Our Moment ✨"}
+            </button>
+          </div>
+        </div>
+
+        {/* Chat Response */}
+        {showChat && (
+          <div style={{
+            background: COLORS.white,
+            border: `2px solid ${COLORS.border}`,
+            borderRadius: "16px",
+            padding: "24px",
+            marginTop: "16px",
           }}>
-            {msg.role === "assistant" && (
-              <div style={{
-                width: "40px",
-                height: "40px",
-                borderRadius: "50%",
-                background: "#FDD835",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: "20px",
-                flexShrink: 0,
+            <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "16px" }}>
+              <span style={{ fontSize: "28px" }}>🌿</span>
+              <div>
+                <div style={{ fontWeight: "bold", color: COLORS.text, fontSize: "15px" }}>Sunny</div>
+                <div style={{ fontSize: "12px", color: COLORS.lightText }}>Your activity guide</div>
+              </div>
+            </div>
+
+            {messages.filter(m => m.role === "assistant").map((msg, i) => (
+              <div key={i} style={{
+                fontSize: "15px",
+                color: COLORS.text,
+                lineHeight: "1.7",
+                marginBottom: "16px",
+                whiteSpace: "pre-wrap",
               }}>
-                🌟
+                {msg.content}
+              </div>
+            ))}
+
+            {loading && (
+              <div style={{ color: COLORS.lightText, fontSize: "14px", fontStyle: "italic" }}>
+                Sunny is finding the perfect moment for you... 🌸
               </div>
             )}
-            <div style={{
-              maxWidth: "75%",
-              padding: "12px 16px",
-              borderRadius: msg.role === "user" ? "20px 20px 4px 20px" : "20px 20px 20px 4px",
-              background: msg.role === "user" ? "#E53935" : "#fff",
-              color: msg.role === "user" ? "#fff" : "#333",
-              fontSize: "15px",
-              lineHeight: "1.6",
-              boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-            }}>
-              {msg.content}
-            </div>
-          </div>
-        ))}
 
-        {loading && (
-          <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
-            <div style={{
-              width: "40px",
-              height: "40px",
-              borderRadius: "50%",
-              background: "#FDD835",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "20px",
-            }}>
-              🌟
-            </div>
-            <div style={{
-              padding: "12px 16px",
-              borderRadius: "20px 20px 20px 4px",
-              background: "#fff",
-              color: "#999",
-              fontSize: "15px",
-              boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-            }}>
-              Sunny is thinking... 🌈
-            </div>
+            {!loading && messages.length > 0 && (
+              <div style={{ marginTop: "16px", borderTop: `1px solid ${COLORS.border}`, paddingTop: "16px" }}>
+                <p style={{ fontSize: "14px", color: COLORS.lightText, marginBottom: "10px" }}>
+                  Want a different idea or have a question?
+                </p>
+                <div style={{ display: "flex", gap: "8px" }}>
+                  <input
+                    value={input}
+                    onChange={e => setInput(e.target.value)}
+                    onKeyDown={e => e.key === "Enter" && sendFollowUp()}
+                    placeholder="Ask Sunny anything..."
+                    style={{
+                      flex: 1,
+                      padding: "10px 14px",
+                      borderRadius: "8px",
+                      border: `1px solid ${COLORS.border}`,
+                      fontSize: "14px",
+                      fontFamily: "Georgia, serif",
+                      background: COLORS.white,
+                      color: COLORS.text,
+                      outline: "none",
+                    }}
+                  />
+                  <button
+                    onClick={sendFollowUp}
+                    style={{
+                      padding: "10px 16px",
+                      borderRadius: "8px",
+                      border: "none",
+                      background: COLORS.accent,
+                      color: "#fff",
+                      fontWeight: "bold",
+                      cursor: "pointer",
+                      fontFamily: "Georgia, serif",
+                    }}
+                  >
+                    Send
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Reset button */}
+        {showChat && !loading && (
+          <div style={{ textAlign: "center", marginTop: "16px" }}>
+            <button
+              onClick={() => { setShowChat(false); setMessages([]); setAge(""); setItem(""); setEnergy(""); }}
+              style={{
+                background: "transparent",
+                border: `1px solid ${COLORS.border}`,
+                color: COLORS.lightText,
+                borderRadius: "8px",
+                padding: "8px 20px",
+                fontSize: "13px",
+                cursor: "pointer",
+                fontFamily: "Georgia, serif",
+              }}
+            >
+              Start Over 🌿
+            </button>
           </div>
         )}
       </div>
 
-      {/* Input */}
-      <div style={{
-        background: "#fff",
-        borderTop: "2px solid #FDD835",
-        padding: "16px",
+      {/* Footer */}
+      <footer style={{
+        textAlign: "center",
+        padding: "32px 20px",
+        color: COLORS.lightText,
+        fontSize: "13px",
+        marginTop: "40px",
+        borderTop: `1px solid ${COLORS.border}`,
       }}>
-        <div style={{
-          maxWidth: "700px",
-          margin: "0 auto",
-          display: "flex",
-          gap: "12px",
-        }}>
-          <input
-            value={input}
-            onChange={e => setInput(e.target.value)}
-            onKeyDown={e => e.key === "Enter" && sendMessage()}
-            placeholder="Create our moment..."
-            style={{
-              flex: 1,
-              padding: "12px 16px",
-              borderRadius: "25px",
-              border: "2px solid #1565C0",
-              fontSize: "15px",
-              outline: "none",
-              fontFamily: "inherit",
-            }}
-          />
-          <button
-            onClick={sendMessage}
-            disabled={loading}
-            style={{
-              padding: "12px 24px",
-              borderRadius: "25px",
-              border: "none",
-              background: loading ? "#ccc" : "#E53935",
-              color: "#fff",
-              fontWeight: "bold",
-              fontSize: "15px",
-              cursor: loading ? "not-allowed" : "pointer",
-            }}
-          >
-            Send 🌟
-          </button>
-        </div>
-      </div>
+        <p>© 2026 PlayReadyLearn — A Ready Learning LLC Product</p>
+        <p style={{ marginTop: "6px" }}>Making every day a learning adventure. 🌿</p>
+      </footer>
     </div>
   );
 }
