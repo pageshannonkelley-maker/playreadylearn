@@ -1,7 +1,6 @@
-
 import { useState, useEffect } from "react";
-import PrivacyPolicy from './PrivacyPolicy'
-import TermsOfService from './TermsOfService'
+import PrivacyPolicy from './components/PrivacyPolicy'
+import TermsOfService from './components/TermsOfService'
 
 const AGE_OPTIONS = [
   "0-3 months old", "3-6 months old", "6-9 months old", "9-12 months old",
