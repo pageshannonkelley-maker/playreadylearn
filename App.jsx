@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import PrivacyPolicy from './components/PrivacyPolicy'
 import TermsOfService from './components/TermsOfService'
