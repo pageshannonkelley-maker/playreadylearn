@@ -95,6 +95,7 @@ export default function App() {
 
   const buildPrompt = (userAge, userItem, userEnergy, userIntelligence) => {
     const intelligenceLabel = INTELLIGENCE_OPTIONS.find(i => i.value === userIntelligence)?.label || "";
+    
     return `You are Sunny, a warm and encouraging early childhood activity guide for busy moms.
 
 A mom needs a "Right Now Moment" activity for her child. Here is her situation:
@@ -108,15 +109,15 @@ Please suggest 2 simple, joyful activities matched to how this child learns best
 FORMAT YOUR RESPONSE EXACTLY LIKE THIS:
 
 🌸 Activity 1: [Name]
-- Step 1
-- Step 2
-- Step 3
+• Step 1
+• Step 2  
+• Step 3
 🧸 Manipulative tip: [one hands-on object or material idea]
 
 🌸 Activity 2: [Name]
-- Step 1
-- Step 2
-- Step 3
+• Step 1
+• Step 2
+• Step 3
 🧸 Manipulative tip: [one hands-on object or material idea]
 
 Keep your tone warm, short, and friendly. Steps should be very brief — one sentence each. Moms are busy and may need to come back to this later, so make it easy to pick up where they left off.`;
@@ -127,10 +128,12 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
       alert("Please fill in all four fields!");
       return;
     }
+
     const prompt = buildPrompt(age, item, energy, intelligence);
     setShowChat(true);
     setLoading(true);
     setMessages([{ role: "user", content: prompt }]);
+
     try {
       const response = await fetch("/api/chat", {
         method: "POST",
@@ -139,16 +142,20 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
       });
       const data = await response.json();
       const reply = data.content?.[0]?.text || "Let me think of something perfect for you!";
+      
       const newCount = responseCount + 1;
       setResponseCount(newCount);
       localStorage.setItem("prl_response_count", newCount.toString());
+
       const newMessages = [
         { role: "user", content: `Age: ${age} | Item: ${item} | Energy: ${energy} | Learning style: ${intelligence}` },
         { role: "assistant", content: reply },
       ];
+
       if (shouldShowQuote(newCount)) {
         newMessages.push({ role: "quote", content: getQuote(newCount) });
       }
+
       setMessages(newMessages);
     } catch (err) {
       console.error(err);
@@ -175,9 +182,11 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
     const conversationMessages = messages
       .filter(m => m.role === "user" || m.role === "assistant")
       .concat(userMessage);
+    
     setMessages([...messages, userMessage]);
     setInput("");
     setLoading(true);
+
     try {
       const response = await fetch("/api/chat", {
         method: "POST",
@@ -186,9 +195,11 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
       });
       const data = await response.json();
       const reply = data.content?.[0]?.text || "Here's another idea!";
+
       const newCount = responseCount + 1;
       setResponseCount(newCount);
       localStorage.setItem("prl_response_count", newCount.toString());
+
       const updatedMessages = [...messages, userMessage, { role: "assistant", content: reply }];
       if (shouldShowQuote(newCount)) {
         updatedMessages.push({ role: "quote", content: getQuote(newCount) });
@@ -291,6 +302,7 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
                 <div style={{ fontSize: "12px", color: COLORS.lightText }}>Your activity guide</div>
               </div>
             </div>
+
             {messages.map((msg, i) => {
               if (msg.role === "assistant") {
                 return (
@@ -319,7 +331,9 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
               }
               return null;
             })}
+
             {loading && <div style={{ color: COLORS.lightText, fontSize: "14px", fontStyle: "italic" }}>Sunny is finding the perfect moment for you... 🌸</div>}
+
             {!loading && messages.length > 0 && (
               <div style={{ marginTop: "16px", borderTop: `1px solid ${COLORS.border}`, paddingTop: "16px" }}>
                 <p style={{ fontSize: "14px", color: COLORS.lightText, marginBottom: "10px" }}>Want a different idea or have a question?</p>
