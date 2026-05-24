@@ -543,9 +543,9 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
       <nav style={{ background: COLORS.button, padding: "14px 32px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
   <span style={{ color: "#FFF8F0", fontSize: "22px", fontWeight: "bold" }}>🌿 PlayReadyLearn</span>
   <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
-    <a href="/blog" style={{ color: "#E8DCC8", fontSize: "16px", fontWeight: "bold", textDecoration: "none", fontFamily: "Georgia, serif" }}>
-      Blog 🌸
-    </a>
+    <a href="/blog" onClick={(e) => { e.preventDefault(); window.location.href = "/blog"; }} style={{ color: "#E8DCC8", fontSize: "16px", textDecoration: "none", fontFamily: "Georgia, serif", fontWeight: "bold", cursor: "pointer" }}>
+  Blog 🌸
+</a>
     <span style={{ color: "#E8DCC8", fontSize: "13px" }}>Raising brilliant children starts with you.</span>
   </div>
 </nav>
