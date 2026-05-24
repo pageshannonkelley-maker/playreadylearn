@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import Blog from './Blog';
+import Admin from './Admin';
 
 const AGE_OPTIONS = [
   "0-3 months old", "3-6 months old", "6-9 months old", "9-12 months old",
@@ -514,7 +516,21 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
     display: "block", fontSize: "15px", color: COLORS.text,
     fontFamily: "Georgia, serif", marginBottom: "6px",
   };
+if (window.location.pathname === "/blog") {
+    return <Blog />;
+  }
 
+  if (window.location.pathname === "/admin") {
+    return <Admin />;
+  }
+
+  if (window.location.pathname === "/privacy") {
+    return <PrivacyPolicy app="playreadylearn" />;
+  }
+
+  if (window.location.pathname === "/terms") {
+    return <TermsOfService app="playreadylearn" />;
+  }
   return (
     <div style={{ minHeight: "100vh", background: "#FAF7F2", fontFamily: "Georgia, serif", paddingBottom: cookiesAccepted ? "0" : "80px" }}>
       {!cookiesAccepted && <CookieBanner onAccept={handleAcceptCookies} />}
