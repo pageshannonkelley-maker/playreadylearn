@@ -546,7 +546,9 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
     <a href="/blog" onClick={(e) => { e.preventDefault(); window.location.href = "/blog"; }} style={{ color: "#E8DCC8", fontSize: "16px", textDecoration: "none", fontFamily: "Georgia, serif", fontWeight: "bold", cursor: "pointer" }}>
   Blog 🌸
 </a>
-    <span style={{ color: "#E8DCC8", fontSize: "13px" }}>Raising brilliant children starts with you.</span>
+ <span onClick={() => window.location.assign("/blog")} style={{ color: "#E8DCC8", fontSize: "16px", fontFamily: "Georgia, serif", fontWeight: "bold", cursor: "pointer" }}>
+  Blog 🌸
+</span>   
   </div>
 </nav>
 
