@@ -96,16 +96,6 @@ const AGENTS = [
     intro: "Let's get moving! What are your fitness goals or concerns right now?",
     systemPrompt: `You are a warm, motivating fitness guide for moms. Ask one question at a time. Key areas: fitness app they use, workout routine questions, current concerns or goals. Offer specific, practical fitness advice. Keep it encouraging, short, and achievable. Always recommend consulting a doctor before starting new exercise programs.`,
   },
-{
-    id: "style",
-    icon: "👗",
-    name: "Style & Fashion",
-    tagline: "Look and feel your best",
-    color: "#880E4F",
-    light: "#FCE4EC",
-    intro: "Let's talk style! Are you looking for everyday outfits, a special occasion, or just want to refresh your wardrobe?",
-    systemPrompt: `You are a warm, stylish personal fashion guide for moms. Ask one question at a time. Key areas: lifestyle and occasion, budget, body type and what makes them feel confident, current wardrobe gaps, favorite colors and styles. Offer specific, practical style advice. Keep it encouraging, fun, and realistic for busy moms.`,
-  },
 ];
 
 const COLORS = {
@@ -542,7 +532,7 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
 
       <nav style={{ background: COLORS.button, padding: "14px 32px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <span style={{ color: "#FFF8F0", fontSize: "22px", fontWeight: "bold" }}>🌿 PlayReadyLearn</span>
-        <span style={{ color: "#E8DCC8", fontSize: "13px" }}>Raising brilliant children starts with you.</span>
+        <span style={{ color: "#E8DCC8", fontSize: "13px" }}>Simple moments. Big growth.</span>
       </nav>
 
       {/* Hero */}
@@ -554,17 +544,17 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
           display: "flex", alignItems: "center", justifyContent: "center",
           fontSize: "64px", boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
         }}>🌸</div>
-        <h1 style={{ fontSize: "clamp(28px, 5vw, 48px)", color: COLORS.text, marginBottom: "8px" }}>Family Centered Home</h1>
-        <p style={{ fontSize: "18px", color: COLORS.lightText, marginBottom: "8px" }}>Research-based activities to help manage your child and home.</p>
-        <p style={{ fontSize: "14px", color: COLORS.lightText }}>Meet Milestones, Grow your Bond and Get the Support You Deserve. ✨</p>
+        <h1 style={{ fontSize: "clamp(28px, 5vw, 48px)", color: COLORS.text, marginBottom: "8px" }}>Simple, joyful activities</h1>
+        <p style={{ fontSize: "18px", color: COLORS.lightText, marginBottom: "8px" }}>to meet milestones and grow your bond.</p>
+        <p style={{ fontSize: "14px", color: COLORS.lightText }}>No prep. No mess. Just moments. ✨</p>
       </div>
 
       {/* Sunny Intake */}
       <div style={{ maxWidth: "560px", margin: "24px auto", padding: "0 16px" }}>
         <div style={{ background: COLORS.bg, border: `2px solid ${COLORS.border}`, borderRadius: "16px", padding: "32px" }}>
-          <h2 style={{ fontSize: "22px", color: COLORS.text, marginBottom: "4px", fontWeight: "bold" }}>Find a "Happy Kids, Happy Family" Moment</h2>
+          <h2 style={{ fontSize: "22px", color: COLORS.text, marginBottom: "4px", fontWeight: "bold" }}>Find a "Right Now" Moment</h2>
           <p style={{ fontSize: "13px", color: COLORS.lightText, marginBottom: "24px" }}>(The AI Generator Intake)</p>
-          <p style={{ fontSize: "15px", color: COLORS.text, marginBottom: "20px", lineHeight: "1.6" }}>What will we do today?</p>
+          <p style={{ fontSize: "15px", color: COLORS.text, marginBottom: "20px", lineHeight: "1.6" }}>What does your "right now" look like?</p>
           <div style={{ display: "grid", gap: "16px" }}>
             <div>
               <label style={labelStyle}>My little one is</label>
@@ -588,7 +578,7 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
               </select>
             </div>
             <div>
-              <label style={labelStyle}>I am feel...</label>
+              <label style={labelStyle}>And honestly, I am feeling</label>
               <select value={energy} onChange={e => setEnergy(e.target.value)} style={selectStyle}>
                 <option value="">Select energy level...</option>
                 {ENERGY_OPTIONS.map(e => <option key={e} value={e}>{e}</option>)}
@@ -659,8 +649,8 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
       {/* Agent Dashboard */}
       <div style={{ maxWidth: "760px", margin: "40px auto", padding: "0 16px" }}>
         <div style={{ textAlign: "center", marginBottom: "24px" }}>
-          <h2 style={{ fontSize: "24px", color: COLORS.text, marginBottom: "6px" }}>Explore Sunny's specialized guides below — from meal planning to finances, she's got you covered.</h2>
-          <p style={{ fontSize: "14px", color: COLORS.lightText }}>Generative AI assistant built for moms with families. </p>
+          <h2 style={{ fontSize: "24px", color: COLORS.text, marginBottom: "6px" }}>Your Personal Guides</h2>
+          <p style={{ fontSize: "14px", color: COLORS.lightText }}>Each guide remembers your conversations and gets smarter over time.</p>
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px" }}>
@@ -743,7 +733,6 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
       <footer style={{ textAlign: "center", padding: "32px 20px", color: COLORS.lightText, fontSize: "13px", marginTop: "40px", borderTop: `1px solid ${COLORS.border}`, fontFamily: "Georgia, serif" }}>
         <p>© {new Date().getFullYear()} PlayReadyLearn — A Ready Learning LLC Product</p>
         <p style={{ marginTop: "6px" }}>Making every day a learning adventure. 🌿</p>
-        For school-age children, visit <a href="https://transitionready.tech" style={{color: COLORS.accent, textDecoration: "none"}}>TransitionReady →</a>
         <div style={{ marginTop: "12px", display: "flex", justifyContent: "center", gap: "16px" }}>
           <a href="/privacy" style={{ color: COLORS.lightText, textDecoration: "none" }}>Privacy Policy</a>
           <span>·</span>

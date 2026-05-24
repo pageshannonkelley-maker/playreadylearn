@@ -13,7 +13,7 @@ const config = {
     accent: "#1E40AF",
     light: "#EFF6FF",
     tagline: "Educator-Focused Lesson Planning",
-    contactEmail: "hello@transitionready.tech",
+    contactEmail: "customerservice@transitionready.online",
     extraSection: {
       title: "FERPA Compliance",
       content: `TransitionReady is designed with FERPA (Family Educational Rights and Privacy Act) compliance in mind. We do not collect, store, or process student education records. All lesson plans, rubrics, and materials generated through our platform belong to the educator and contain no student-identifying information. Educators are responsible for ensuring that any content they create through our platform complies with their institution's FERPA obligations.`
@@ -27,7 +27,7 @@ const config = {
     accent: "#1D4ED8",
     light: "#FEF2F2",
     tagline: "Learning Through Play",
-    contactEmail: "hello@playreadylearn.com",
+    contactEmail: "customerservice@transitionready.online",
     extraSection: {
       title: "COPPA Compliance",
       content: `PlayReadyLearn is designed with COPPA (Children's Online Privacy Protection Act) compliance in mind. We do not create profiles for children, and we do not collect any personally identifiable information about children under 13. Our service is directed at parents and caregivers, who are the account holders. We only ask for a child's general age range to personalize activity suggestions — no names, birthdates, or identifying information are ever collected or stored.`

@@ -10,7 +10,7 @@ const config = {
     accent: "#1E40AF",
     light: "#EFF6FF",
     tagline: "Educator-Focused Lesson Planning",
-    contactEmail: "hello@transitionready.tech",
+    contactEmail: "customerservice@transitionready.online",
     serviceDescription: "an AI-powered lesson planning and transition planning tool for educators and special education professionals",
     prohibitedExtra: [
       "Enter real student names, student ID numbers, Social Security numbers, or any personally identifiable student information into the platform",
@@ -24,7 +24,7 @@ const config = {
     accent: "#1D4ED8",
     light: "#FEF2F2",
     tagline: "Learning Through Play",
-    contactEmail: "hello@playreadylearn.com",
+    contactEmail: "customerservice@transitionready.online",
     serviceDescription: "an AI-powered activity planning tool for parents and caregivers of young children",
     prohibitedExtra: [
       "Enter any personally identifiable information about children, including names, birthdates, school names, or addresses",
