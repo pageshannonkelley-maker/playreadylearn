@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import PrivacyPolicy from './PrivacyPolicy'
 import TermsOfService from './TermsOfService'
+import Blog from './Blog'
+import Admin from './Admin'
 
 const AGE_OPTIONS = [
   "0-3 months old", "3-6 months old", "6-9 months old", "9-12 months old",
@@ -98,7 +100,15 @@ export default function App() {
     localStorage.setItem("prl_cookies_accepted", "true");
     setCookiesAccepted(true);
   };
+// Route: /blog
+  if (window.location.pathname === "/blog") {
+    return <Blog />;
+  }
 
+  // Route: /admin
+  if (window.location.pathname === "/admin") {
+    return <Admin />;
+  }
   // Route: /privacy
   if (window.location.pathname === "/privacy") {
     return (

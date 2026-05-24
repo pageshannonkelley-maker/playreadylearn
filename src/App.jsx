@@ -541,9 +541,14 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
       )}
 
       <nav style={{ background: COLORS.button, padding: "14px 32px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <span style={{ color: "#FFF8F0", fontSize: "22px", fontWeight: "bold" }}>🌿 PlayReadyLearn</span>
-        <span style={{ color: "#E8DCC8", fontSize: "13px" }}>Raising brilliant children starts with you.</span>
-      </nav>
+  <span style={{ color: "#FFF8F0", fontSize: "22px", fontWeight: "bold" }}>🌿 PlayReadyLearn</span>
+  <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+    <a href="/blog" style={{ color: "#E8DCC8", fontSize: "16px", fontWeight: "bold", textDecoration: "none", fontFamily: "Georgia, serif" }}>
+      Blog 🌸
+    </a>
+    <span style={{ color: "#E8DCC8", fontSize: "13px" }}>Raising brilliant children starts with you.</span>
+  </div>
+</nav>
 
       {/* Hero */}
       <div style={{ textAlign: "center", padding: "40px 20px 20px", background: "linear-gradient(180deg, #EDE8E0 0%, #FAF7F2 100%)" }}>

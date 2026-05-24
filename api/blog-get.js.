@@ -1,0 +1,27 @@
+import { list } from "@vercel/blob";
+
+export default async function handler(req, res) {
+  if (req.method !== "GET") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
+
+  try {
+    const { blobs } = await list({ prefix: "blog/" });
+    
+    const posts = await Promise.all(
+      blobs.map(async (blob) => {
+        const response = await fetch(blob.url);
+        const post = await response.json();
+        return post;
+      })
+    );
+
+    // Sort by newest first
+    posts.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+
+    return res.status(200).json({ posts });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: err.message });
+  }
+}
