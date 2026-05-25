@@ -83,19 +83,17 @@ FORMAT YOUR RESPONSE AS JSON ONLY (no markdown, no backticks):
 
   const savePost = async () => {
   setSaving(true);
-  console.log("Sending password:", password);
   try {
     const response = await fetch("/api/blog-save", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        password,
-        action: "save",
-        post: { ...generatedPost, category },
+        secret: "PlayReady2026",
+        category,
+        post: generatedPost,
       }),
     });
     const data = await response.json();
-    console.log("Response:", data);
     if (data.success) {
       setSaveSuccess(true);
       setGeneratedPost(null);
@@ -111,7 +109,6 @@ FORMAT YOUR RESPONSE AS JSON ONLY (no markdown, no backticks):
     setSaving(false);
   }
 };
-
   if (!authenticated) {
     return (
       <div style={{ minHeight: "100vh", background: "#FAF7F2", fontFamily: "Georgia, serif", display: "flex", alignItems: "center", justifyContent: "center" }}>
