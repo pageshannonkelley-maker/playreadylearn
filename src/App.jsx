@@ -682,7 +682,7 @@ if (window.location.pathname === "/blog") {
       <div style={{ maxWidth: "760px", margin: "40px auto", padding: "0 16px" }}>
         <div style={{ textAlign: "center", marginBottom: "24px" }}>
           <h2 style={{ fontSize: "24px", color: COLORS.text, marginBottom: "6px" }}>Explore Sunny's specialized guides below — from meal planning to finances, she's got you covered.</h2>
-          <p style={{ fontSize: "14px", color: COLORS.lightText }}>Generative AI assistant built for moms with families. </p>
+          <p style={{ fontSize: "14px", color: COLORS.lightText }}>Agentic AI assistant built for moms with families. </p>
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px" }}>
