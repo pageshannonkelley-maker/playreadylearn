@@ -33,12 +33,13 @@ export default function Admin() {
   const [error, setError] = useState("");
 
   const handleLogin = (e) => {
-    e.preventDefault();
-    if (password.length > 0) {
-      setAuthenticated(true);
-    }
-  };
-
+  e.preventDefault();
+  if (password === "PlayReady2026") {
+    setAuthenticated(true);
+  } else {
+    alert("Incorrect password");
+  }
+};
   const generatePost = async () => {
     if (!topic || !category) {
       setError("Please enter a topic and select a category.");
