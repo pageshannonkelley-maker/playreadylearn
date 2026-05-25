@@ -82,33 +82,35 @@ FORMAT YOUR RESPONSE AS JSON ONLY (no markdown, no backticks):
   };
 
   const savePost = async () => {
-    setSaving(true);
-    try {
-      const response = await fetch("/api/blog-save", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          password,
-          action: "save",
-          post: { ...generatedPost, category },
-        }),
-      });
-      const data = await response.json();
-      if (data.success) {
-        setSaveSuccess(true);
-        setGeneratedPost(null);
-        setTopic("");
-        setCategory("");
-        setTimeout(() => setSaveSuccess(false), 3000);
-      } else {
-        setError("Failed to save. Check your password.");
-      }
-    } catch (err) {
-      setError("Something went wrong saving the post.");
-    } finally {
-      setSaving(false);
+  setSaving(true);
+  console.log("Sending password:", password);
+  try {
+    const response = await fetch("/api/blog-save", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        password,
+        action: "save",
+        post: { ...generatedPost, category },
+      }),
+    });
+    const data = await response.json();
+    console.log("Response:", data);
+    if (data.success) {
+      setSaveSuccess(true);
+      setGeneratedPost(null);
+      setTopic("");
+      setCategory("");
+      setTimeout(() => setSaveSuccess(false), 3000);
+    } else {
+      setError("Failed to save: " + data.error);
     }
-  };
+  } catch (err) {
+    setError("Something went wrong saving the post.");
+  } finally {
+    setSaving(false);
+  }
+};
 
   if (!authenticated) {
     return (
