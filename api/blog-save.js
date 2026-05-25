@@ -1,6 +1,6 @@
 import { put, list } from "@vercel/blob";
 
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+const ADMIN_PASSWORD = "PlayReady2026";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
