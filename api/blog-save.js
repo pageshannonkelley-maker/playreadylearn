@@ -24,7 +24,7 @@ export default async function handler(req, res) {
       category: category,
       excerpt: post.excerpt,
       publishedAt: new Date().toISOString(),
-      author: "Page Shannon Kelley",
+      author: "Shannon Page Kelley",
     };
 
     await put(`blog/${id}.json`, JSON.stringify(postData), {

@@ -55,7 +55,7 @@ export default function Admin() {
 Write a complete blog post about: "${topic}"
 Category: ${category}
 
-The blog is written by Page Shannon Kelley — a special education teacher and mom who believes every child is brilliant in their own way.
+The blog is written by Shannon Page Kelley — a special education teacher and mom who believes every child is brilliant in their own way.
 
 FORMAT YOUR RESPONSE AS JSON ONLY (no markdown, no backticks):
 {
