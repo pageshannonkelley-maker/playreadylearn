@@ -31,6 +31,7 @@ export default async function handler(req, res) {
       access: "public",
       contentType: "application/json",
       token: process.env.PUBLIC_BLOG_READ_WRITE_TOKEN,
+      storeId: process.env.PUBLIC_BLOG_STORE_ID,
     });
 
     return res.status(200).json({ success: true, post: postData });
