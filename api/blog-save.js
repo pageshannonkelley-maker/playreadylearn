@@ -1,5 +1,7 @@
 import { list } from "@vercel/blob";
-
+export const config = {
+  maxDuration: 30,
+};
 if (req.method !== "POST" && req.method !== "GET") {
     return res.status(405).json({ error: "Method not allowed" });
   }

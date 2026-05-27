@@ -24,7 +24,11 @@ When suggesting activities always include:
 - What they are learning (briefly)
 
 Focus on: sensory play, outdoor activities, creative projects, reading, simple games, cooking together, nature exploration.`;
+const DEFAULT_SYSTEM_PROMPT = `You are Sunny...`
 
+export const config = {
+  maxDuration: 30,
+};
 async function tryClause(messages) {
   const response = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
