@@ -72,7 +72,7 @@ const AGENTS = [
     id: "holidays",
     icon: "🎁",
     name: "Holidays & Gifts",
-    tagline: "Stay ahead of every special moment!",
+    tagline: "Stay ahead of special moment.",
     color: "#6A1B9A",
     light: "#F3E5F5",
     intro: "I'll help you stay ahead of every special moment! What's coming up that you want to remember?",
@@ -576,7 +576,7 @@ if (window.location.pathname === "/blog") {
           display: "flex", alignItems: "center", justifyContent: "center",
           fontSize: "64px", boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
         }}>🌸</div>
-        <h1 style={{ fontSize: "clamp(28px, 5vw, 48px)", color: COLORS.text, marginBottom: "8px" }}>Family Centered Home</h1>
+        <h1 style={{ fontSize: "clamp(28px, 5vw, 48px)", color: COLORS.text, marginBottom: "8px" }}>Intelligent Mother</h1>
         <p style={{ fontSize: "18px", color: COLORS.lightText, marginBottom: "8px" }}>Research-based activities to help manage your child and home.</p>
         <p style={{ fontSize: "14px", color: COLORS.lightText }}>Meet Milestones, Grow your Bond and Get the Support You Deserve. ✨</p>
       </div>
