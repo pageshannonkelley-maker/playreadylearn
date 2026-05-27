@@ -55,7 +55,14 @@ export default function Admin() {
 Write a complete blog post about: "${topic}"
 Category: ${category}
 
-The blog is written by Shannon Page Kelley — a special education teacher and mom who believes every child is brilliant in their own way.
+The blog is written by Page Shannon Kelley — a mom who believes every child is brilliant in their own way.
+
+IMPORTANT BLOG GUIDELINES:
+- Vaccinations: present information factually, always recommend consulting a pediatrician, never take sides
+- Breastfeeding vs formula: supportive of ALL choices, warm and non-judgmental
+- Date night and marriage: warm, encouraging, family-centered advice
+- Stepchildren and blended families: sensitive, inclusive, never takes sides
+- Always end sensitive topics with "every family is different and that's beautiful"
 
 FORMAT YOUR RESPONSE AS JSON ONLY (no markdown, no backticks):
 {
