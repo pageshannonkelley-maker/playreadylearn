@@ -1,34 +1,24 @@
-import { put } from "@vercel/blob";
+import { list } from "@vercel/blob";
 
 export default async function handler(req, res) {
-  if (req.method !== "POST") {
+  if (req.method !== "GET") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { post, category, secret } = req.body;
-
-  if (secret !== "PlayReady2026") {
-    return res.status(401).json({ error: "Unauthorized" });
-  }
-
   try {
-    const id = `post_${Date.now()}`;
-    const postData = {
-      id,
-      title: post.title,
-      content: post.content,
-      category: category,
-      excerpt: post.excerpt,
-      publishedAt: new Date().toISOString(),
-      author: "Page Shannon Kelley",
-    };
+    const { blobs } = await list({ prefix: "blog/" });
+    
+    const posts = await Promise.all(
+      blobs.map(async (blob) => {
+        const response = await fetch(blob.url);
+        const text = await response.text();
+        return JSON.parse(text);
+      })
+    );
 
-    await put(`blog/${id}.json`, JSON.stringify(postData), {
-      access: "private",
-      contentType: "application/json",
-    });
+    posts.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
 
-    return res.status(200).json({ success: true, post: postData });
+    return res.status(200).json({ posts });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: err.message });
