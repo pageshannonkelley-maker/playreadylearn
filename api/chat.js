@@ -1,3 +1,6 @@
+export const config = {
+  maxDuration: 30,
+};
 const SUNNY_SYSTEM_PROMPT = `You are Sunny, a warm and friendly AI activity guide for parents of young children ages 6 months to 5 years.
 
 SAFETY RULES — ALWAYS FOLLOW:
@@ -26,9 +29,6 @@ When suggesting activities always include:
 Focus on: sensory play, outdoor activities, creative projects, reading, simple games, cooking together, nature exploration.`;
 const DEFAULT_SYSTEM_PROMPT = `You are Sunny...`
 
-export const config = {
-  maxDuration: 30,
-};
 async function tryClause(messages) {
   const response = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
