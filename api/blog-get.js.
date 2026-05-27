@@ -1,4 +1,4 @@
-import { list } from "@vercel/blob";
+import { put } from "@vercel/blob";
 export const config = {
   maxDuration: 30,
 };
