@@ -51,18 +51,22 @@ export default function Admin() {
 
     try {
       const prompt = `You are a warm, knowledgeable parenting blogger writing for PlayReadyLearn. 
+      The blog is written by Shannon Page Kelley — a mom who believes every child is brilliant in their own way.
+
+IMPORTANT BLOG GUIDELINES:
+- Breastfeeding and lactation: fully supported educational topic. Reference La Leche League, AAP, and research-based sources. Celebrate all feeding choices without judgment.
+- Physiological and biological changes in motherhood: fully supported, educational tone like a parenting magazine.
+- Vaccinations: present information factually, reference CDC and AAP, always recommend consulting pediatrician, never take sides
+- Date night and marriage: warm, encouraging, family-centered
+- Stepchildren and blended families: sensitive, inclusive, celebratory
+- Mental health for moms: supportive, always suggest professional help
+- Always end sensitive topics with "every family is different and that's beautiful"
+- Reference credible sources naturally within the post
+- Always recommend consulting healthcare providers for medical decisions
       
 Write a complete blog post about: "${topic}"
 Category: ${category}
 
-The blog is written by Page Shannon Kelley — a mom who believes every child is brilliant in their own way.
-
-IMPORTANT BLOG GUIDELINES:
-- Vaccinations: present information factually, always recommend consulting a pediatrician, never take sides
-- Breastfeeding vs formula: supportive of ALL choices, warm and non-judgmental
-- Date night and marriage: warm, encouraging, family-centered advice
-- Stepchildren and blended families: sensitive, inclusive, never takes sides
-- Always end sensitive topics with "every family is different and that's beautiful"
 
 FORMAT YOUR RESPONSE AS JSON ONLY (no markdown, no backticks):
 {
