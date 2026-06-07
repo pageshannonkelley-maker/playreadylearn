@@ -349,6 +349,49 @@ function ChildProfile({ child, onSave, onClose }) {
     </div>
   );
 }
+const TAGLINES = [
+  "Raising brilliant children starts with you.",
+  "The smartest thing you can do for your child is take care of yourself.",
+  "Intelligent moms raise intelligent children.",
+  "Because motherhood deserves a little help.",
+  "For the mom who does everything — and still wants to do more.",
+  "AI designed for the most important job in the world.",
+  "Your smartest parenting partner.",
+  "Where intelligence meets motherhood.",
+  "Moms who know things. Children who grow.",
+  "Less guessing. More connecting.",
+  "Smart plans for real life.",
+  "Simple moments. Smart choices. Happy family.",
+];
+
+function RotatingTagline() {
+  const [index, setIndex] = useState(0);
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setVisible(false);
+      setTimeout(() => {
+        setIndex(i => (i + 1) % TAGLINES.length);
+        setVisible(true);
+      }, 500);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <p style={{
+      fontSize: "18px",
+      color: COLORS.lightText,
+      marginBottom: "8px",
+      transition: "opacity 0.5s ease",
+      opacity: visible ? 1 : 0,
+      minHeight: "28px",
+    }}>
+      {TAGLINES[index]}
+    </p>
+  );
+}
 
 export default function App() {
   const [age, setAge] = useState("");
@@ -576,15 +619,18 @@ if (window.location.pathname === "/blog") {
           display: "flex", alignItems: "center", justifyContent: "center",
           fontSize: "64px", boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
         }}>🌸</div>
-        <h1 style={{ fontSize: "clamp(28px, 5vw, 48px)", color: COLORS.text, marginBottom: "8px" }}>Intelligent Mother</h1>
-        <p style={{ fontSize: "18px", color: COLORS.lightText, marginBottom: "8px" }}>Research-based activities to help manage your child and home.</p>
-        <p style={{ fontSize: "14px", color: COLORS.lightText }}>Meet Milestones, Grow your Bond and Get the Support You Deserve. ✨</p>
-      </div>
+        <h1 style={{ fontSize: "clamp(28px, 5vw, 48px)", color: COLORS.text, marginBottom: "8px" }}>
+  Intelligent Mother
+</h1>
 
+<p style={{ fontSize: "16px", color: COLORS.lightText, minHeight: "24px" }}>
+  <RotatingTagline />
+</p>
+</div>
       {/* Sunny Intake */}
       <div style={{ maxWidth: "560px", margin: "24px auto", padding: "0 16px" }}>
         <div style={{ background: COLORS.bg, border: `2px solid ${COLORS.border}`, borderRadius: "16px", padding: "32px" }}>
-          <h2 style={{ fontSize: "22px", color: COLORS.text, marginBottom: "4px", fontWeight: "bold" }}>Find a "Happy Kids, Happy Family" Moment</h2>
+          <h2 style={{ fontSize: "22px", color: COLORS.text, marginBottom: "4px", fontWeight: "bold" }}>Smart,Organized, Best Plan for Today" Moment</h2>
           <p style={{ fontSize: "13px", color: COLORS.lightText, marginBottom: "24px" }}>(The AI Generator Intake)</p>
           <p style={{ fontSize: "15px", color: COLORS.text, marginBottom: "20px", lineHeight: "1.6" }}>What will we do today?</p>
           <div style={{ display: "grid", gap: "16px" }}>
