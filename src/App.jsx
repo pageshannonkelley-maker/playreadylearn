@@ -392,9 +392,8 @@ function RotatingTagline() {
     }, 4000);
     return () => clearInterval(interval);
      }, []);
-  export default App;
-  const [age, setAge] = useState("");
-  const [item, setItem] = useState("");
+    }
+  
   const [energy, setEnergy] = useState("");
   const [intelligence, setIntelligence] = useState("");
   const [messages, setMessages] = useState([]);
@@ -408,6 +407,8 @@ function RotatingTagline() {
   const [showChildForm, setShowChildForm] = useState(false);
   const [editingChild, setEditingChild] = useState(null);
   const [agentSummaries, setAgentSummaries] = useState({});
+  
+  export default App;
 
   useEffect(() => {
     const accepted = localStorage.getItem("prl_cookies_accepted");
