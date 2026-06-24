@@ -408,8 +408,6 @@ function RotatingTagline() {
   const [editingChild, setEditingChild] = useState(null);
   const [agentSummaries, setAgentSummaries] = useState({});
   
-  export default App;
-
   useEffect(() => {
     const accepted = localStorage.getItem("prl_cookies_accepted");
     if (accepted) setCookiesAccepted(true);
@@ -827,3 +825,4 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
     </div>
   );
 }
+  export default App;
