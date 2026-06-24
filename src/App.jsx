@@ -1,6 +1,16 @@
 import { useState, useEffect } from "react";
-import Blog from './Blog';
-import Admin from './Admin';
+// import Blog from './Blog';
+// import Admin from './Admin';
+
+const COLORS = {
+  bg: "#F5F0E8",
+  border: "#B5956A",
+  button: "#8B7355",
+  text: "#3D2B1F",
+  lightText: "#6B5344",
+  white: "#FDFAF5",
+  accent: "#7A9E7E",
+};
 
 const AGE_OPTIONS = [
   "0-3 months old", "3-6 months old", "6-9 months old", "9-12 months old",
@@ -107,22 +117,22 @@ const AGENTS = [
     light: "#FCE4EC",
     intro: "Let's talk style! Are you looking for everyday outfits, a special occasion, or just want to refresh your wardrobe?",
     systemPrompt: `You are a warm, stylish personal fashion guide for moms. Ask one question at a time. Key areas: lifestyle and occasion, budget, body type and what makes them feel confident, current wardrobe gaps, favorite colors and styles. Offer specific, practical style advice. Keep it encouraging, fun, and realistic for busy moms.`,
-  },
+  }, 
 ];
+export default function App() {
+  const [childProfiles, setChildProfiles] = useState(() => {
+  const saved = localStorage.getItem("prl_child_profiles");
+  return saved ? JSON.parse(saved) : [];
+});
 
-const COLORS = {
-  bg: "#F5F0E8",
-  border: "#B5956A",
-  button: "#8B7355",
-  text: "#3D2B1F",
-  lightText: "#6B5344",
-  white: "#FDFAF5",
-  accent: "#7A9E7E",
-};
+const [activeChildAgentId, setActiveChildAgentId] = useState(null);
 
+const handleSelectChildAgent = (child) => {
+  setActiveChildAgentId(child.id);
+}; 
 function CookieBanner({ onAccept }) {
   return (
-    <div style={{
+    <div style={{  
       position: "fixed", bottom: 0, left: 0, right: 0,
       background: "#3D2B1F", padding: "16px 24px",
       display: "flex", flexWrap: "wrap", alignItems: "center",
@@ -133,6 +143,10 @@ function CookieBanner({ onAccept }) {
         🍪 We use cookies to remember your preferences. We never collect information about children.{" "}
         <a href="/privacy" style={{ color: "#A8C5A0" }}>Learn more</a>
       </p>
+
+  if (typeof setSelectedAge === "function") setSelectedAge(child.age);
+  if (typeof setSelectedLearningStyle === "function") setSelectedLearningStyle(child.learning);
+
       <button onClick={onAccept} style={{
         padding: "10px 24px", borderRadius: "8px", border: "none",
         background: COLORS.accent, color: "#fff", fontWeight: "bold",
@@ -377,23 +391,8 @@ function RotatingTagline() {
       }, 500);
     }, 4000);
     return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <p style={{
-      fontSize: "18px",
-      color: COLORS.lightText,
-      marginBottom: "8px",
-      transition: "opacity 0.5s ease",
-      opacity: visible ? 1 : 0,
-      minHeight: "28px",
-    }}>
-      {TAGLINES[index]}
-    </p>
-  );
-}
-
-export default function App() {
+     }, []);
+  export default function App() {
   const [age, setAge] = useState("");
   const [item, setItem] = useState("");
   const [energy, setEnergy] = useState("");
@@ -413,19 +412,23 @@ export default function App() {
   useEffect(() => {
     const accepted = localStorage.getItem("prl_cookies_accepted");
     if (accepted) setCookiesAccepted(true);
+    
     const count = parseInt(localStorage.getItem("prl_response_count") || "0");
     setResponseCount(count);
+    
     const savedChildren = localStorage.getItem("prl_children");
     if (savedChildren) setChildren(JSON.parse(savedChildren));
+    
     // Load agent summaries
     const summaries = {};
-    AGENTS.forEach(a => {
-      const s = localStorage.getItem(`prl_agent_${a.id}_summary`);
-      if (s) summaries[a.id] = s;
-    });
+    if (typeof AGENTS !== 'undefined') {
+      AGENTS.forEach(a => {
+        const s = localStorage.getItem(`prl_agent_${a.id}_summary`);
+        if (s) summaries[a.id] = s;
+      });
+    }
     setAgentSummaries(summaries);
   }, []);
-
   const handleAcceptCookies = () => {
     localStorage.setItem("prl_cookies_accepted", "true");
     setCookiesAccepted(true);
@@ -559,13 +562,13 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
     display: "block", fontSize: "15px", color: COLORS.text,
     fontFamily: "Georgia, serif", marginBottom: "6px",
   };
-if (window.location.pathname === "/blog") {
-    return <Blog />;
-  }
+// if (window.location.pathname === "/blog") {
+  //  return <Blog />;
+  // }
 
-  if (window.location.pathname === "/admin") {
-    return <Admin />;
-  }
+  //if (window.location.pathname === "/admin") {
+  //  return <Admin />;
+  // }
 
   if (window.location.pathname === "/privacy") {
     return <PrivacyPolicy app="playreadylearn" />;
