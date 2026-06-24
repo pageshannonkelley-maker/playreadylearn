@@ -392,7 +392,7 @@ function RotatingTagline() {
     }, 4000);
     return () => clearInterval(interval);
      }, []);
-  export default function App() {
+  export default App;
   const [age, setAge] = useState("");
   const [item, setItem] = useState("");
   const [energy, setEnergy] = useState("");
