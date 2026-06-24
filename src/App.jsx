@@ -119,7 +119,7 @@ const AGENTS = [
     systemPrompt: `You are a warm, stylish personal fashion guide for moms. Ask one question at a time. Key areas: lifestyle and occasion, budget, body type and what makes them feel confident, current wardrobe gaps, favorite colors and styles. Offer specific, practical style advice. Keep it encouraging, fun, and realistic for busy moms.`,
   }, 
 ];
-export default function App() {
+function App() {
   const [childProfiles, setChildProfiles] = useState(() => {
   const saved = localStorage.getItem("prl_child_profiles");
   return saved ? JSON.parse(saved) : [];
