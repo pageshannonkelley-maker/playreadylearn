@@ -26,7 +26,7 @@ async function tryClaude(messages, systemPrompt) {
       "anthropic-version": "2023-06-01"
     },
     body: JSON.stringify({
-      model: "claude-sonnet-4-20250514",
+      model: "claude-3-opus-20240229",
       max_tokens: 1000,
       system: systemPrompt,
       messages: messages.map(m => ({
