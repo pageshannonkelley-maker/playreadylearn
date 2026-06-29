@@ -1,6 +1,4 @@
 import { useState, useEffect } from "react";
-// import Blog from './Blog';
-// import Admin from './Admin';
 
 const COLORS = {
   bg: "#F5F0E8",
@@ -165,13 +163,12 @@ function AgentChat({ agent, onClose }) {
   const saveMessages = (msgs) => {
     setMessages(msgs);
     localStorage.setItem(storageKey, JSON.stringify(msgs));
-    // Save last message as summary
+  
     const lastAssistant = msgs.filter(m => m.role === "assistant").pop();
     if (lastAssistant) {
       localStorage.setItem(`prl_agent_${agent.id}_summary`, lastAssistant.content.slice(0, 80));
     }
   };
-
   const sendMessage = async () => {
     if (!input.trim()) return;
     const userMessage = { role: "user", content: input };
@@ -412,7 +409,6 @@ function RotatingTagline() {
     const savedChildren = localStorage.getItem("prl_children");
     if (savedChildren) setChildren(JSON.parse(savedChildren));
     
-    // Load agent summaries
     const summaries = {};
     if (typeof AGENTS !== 'undefined') {
       AGENTS.forEach(a => {
@@ -555,13 +551,6 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
     display: "block", fontSize: "15px", color: COLORS.text,
     fontFamily: "Georgia, serif", marginBottom: "6px",
   };
-// if (window.location.pathname === "/blog") {
-  //  return <Blog />;
-  // }
-
-  //if (window.location.pathname === "/admin") {
-  //  return <Admin />;
-  // }
 
   if (window.location.pathname === "/privacy") {
     return <PrivacyPolicy app="playreadylearn" />;
