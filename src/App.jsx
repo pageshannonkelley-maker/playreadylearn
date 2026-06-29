@@ -382,18 +382,17 @@ function RotatingTagline() {
   const [index, setIndex] = useState(0);
   const [visible, setVisible] = useState(true);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setVisible(false);
-      setTimeout(() => {
-        setIndex(i => (i + 1) % TAGLINES.length);
-        setVisible(true);
-      }, 500);
-    }, 4000);
-    return () => clearInterval(interval);
-     }, []);
-    }
-  
+ useEffect(() => {
+  const interval = setInterval(() => {
+    setVisible(false);
+    setTimeout(() => {
+      setIndex(i => (i + 1) % TAGLINES.length);
+      setVisible(true);
+    }, 500);
+  }, 4000);
+  return () => clearInterval(interval);
+}, []);
+
   const [energy, setEnergy] = useState("");
   const [intelligence, setIntelligence] = useState("");
   const [messages, setMessages] = useState([]);
