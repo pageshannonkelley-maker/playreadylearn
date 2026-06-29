@@ -1,8 +1,7 @@
-import { put } from "@vercel/blob";
+import { list } from "@vercel/blob";
 
-export const config = {
-  maxDuration: 30,
-};
+export const maxDuration = 60;
+export const dynamic = 'force-dynamic';
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
