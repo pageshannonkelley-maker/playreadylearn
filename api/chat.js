@@ -1,9 +1,9 @@
-import Anthropic from '@anthropic-ai/sdk';
+const Anthropic = require('@anthropic-ai/sdk');
 
 export const maxDuration = 60;
 export const dynamic = 'force-dynamic';
 
-// Initialize the official Anthropic client safely
+// Initialize the official Anthropic client safely using standard Node syntax
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
@@ -35,7 +35,6 @@ When suggesting activities always include:
 Focus on: sensory play, outdoor activities, creative projects, reading, simple games, cooking together, nature exploration.`;
 
 async function tryClaude(messages, systemPrompt) {
-  // Use the official SDK creation method instead of a manual fetch
   const msg = await anthropic.messages.create({
     model: "claude-3-5-sonnet-20240620",
     max_tokens: 1000,
