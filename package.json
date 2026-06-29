@@ -1,9 +1,10 @@
 {
   "name": "playreadylearn",
   "version": "1.0.0",
+  "type" : "module",
   "private": true,
   "engines": {
-    "node": "20.x"
+    "node": "24.x"
   },
   "dependencies": {
     "@vercel/blob": "^2.4.0",
