@@ -11,8 +11,6 @@ const COLORS = {
   white: "#FDFAF5",
   accent: "#7A9E7E",
 };
-export default function App() { 
-  
 const AGE_OPTIONS = [
   "0-3 months old", "3-6 months old", "6-9 months old", "9-12 months old",
   "1 year old", "18 months old", "2 years old", "3 years old", "4 years old", "5 years old"
@@ -145,9 +143,6 @@ function CookieBanner({ onAccept }) {
         <a href="/privacy" style={{ color: "#A8C5A0" }}>Learn more</a>
       </p>
 
-  if (typeof setSelectedAge === "function") setSelectedAge(child.age);
-  if (typeof setSelectedLearningStyle === "function") setSelectedLearningStyle(child.learning);
-
       <button onClick={onAccept} style={{
         padding: "10px 24px", borderRadius: "8px", border: "none",
         background: COLORS.accent, color: "#fff", fontWeight: "bold",
@@ -156,7 +151,6 @@ function CookieBanner({ onAccept }) {
     </div>
   );
 }
-
 function AgentChat({ agent, onClose }) {
   const storageKey = `prl_agent_${agent.id}`;
   const [messages, setMessages] = useState(() => {
