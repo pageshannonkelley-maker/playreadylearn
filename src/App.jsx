@@ -11,7 +11,8 @@ const COLORS = {
   white: "#FDFAF5",
   accent: "#7A9E7E",
 };
-
+export default function App() { 
+  
 const AGE_OPTIONS = [
   "0-3 months old", "3-6 months old", "6-9 months old", "9-12 months old",
   "1 year old", "18 months old", "2 years old", "3 years old", "4 years old", "5 years old"
@@ -824,4 +825,4 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
     </div>
   );
 }
-  export default App;
+  
