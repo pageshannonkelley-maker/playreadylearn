@@ -1,6 +1,5 @@
-export const config = {
-  maxDuration: 30,
-};
+export const maxDuration = 60;
+export const dynamic = 'force-dynamic';
 
 const SUNNY_SYSTEM_PROMPT = `You are Sunny, a warm and friendly AI activity guide for parents of young children ages 6 months to 5 years.
 
