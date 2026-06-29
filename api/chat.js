@@ -1,5 +1,12 @@
+import Anthropic from '@anthropic-ai/sdk';
+
 export const maxDuration = 60;
 export const dynamic = 'force-dynamic';
+
+// Initialize the official Anthropic client safely
+const anthropic = new Anthropic({
+  apiKey: process.env.ANTHROPIC_API_KEY,
+});
 
 const SUNNY_SYSTEM_PROMPT = `You are Sunny, a warm and friendly AI activity guide for parents of young children ages 6 months to 5 years.
 
@@ -28,27 +35,18 @@ When suggesting activities always include:
 Focus on: sensory play, outdoor activities, creative projects, reading, simple games, cooking together, nature exploration.`;
 
 async function tryClaude(messages, systemPrompt) {
-  const response = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": process.env.ANTHROPIC_API_KEY,
-      "anthropic-version": "2023-06-01"
-    },
-    body: JSON.stringify({
-      model: "claude-3-5-sonnet-20240620",
-      max_tokens: 1000,
-      system: systemPrompt,
-      messages: messages.map(m => ({
-        role: m.role,
-        content: m.content
-      })),
-    }),
+  // Use the official SDK creation method instead of a manual fetch
+  const msg = await anthropic.messages.create({
+    model: "claude-3-5-sonnet-20240620",
+    max_tokens: 1000,
+    system: systemPrompt,
+    messages: messages.map(m => ({
+      role: m.role,
+      content: m.content
+    })),
   });
 
-  if (!response.ok) throw new Error(`Claude error: ${response.status}`);
-  const data = await response.json();
-  return { content: data.content, provider: "claude" };
+  return { content: msg.content, provider: "claude" };
 }
 
 async function tryGemini(messages, systemPrompt) {
