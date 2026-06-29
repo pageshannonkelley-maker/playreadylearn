@@ -33,8 +33,7 @@ async function tryClaude(messages, systemPrompt) {
     headers: {
       "Content-Type": "application/json",
       "x-api-key": process.env.ANTHROPIC_API_KEY,
-      "anthropic-version": "2023-06-01",
-      "anthropic-dangerous-direct-browser-access": "true"
+      "anthropic-version": "2023-06-01"
     },
     body: JSON.stringify({
       model: "claude-3-5-sonnet-20240620",
@@ -49,7 +48,7 @@ async function tryClaude(messages, systemPrompt) {
 
   if (!response.ok) throw new Error(`Claude error: ${response.status}`);
   const data = await response.json();
-  return { content: data.content, provider: "claude" };
+  return data.content[0].text; 
 }
 
 async function tryGemini(messages, systemPrompt) {
@@ -61,23 +60,25 @@ async function tryGemini(messages, systemPrompt) {
 
   const fullPrompt = `${systemPrompt}\n\n${conversation ? `Previous conversation:\n${conversation}\n\n` : ""}User: ${lastMessage}\n\nAssistant:`;
 
-  // Updated endpoint to the stable v1 path to resolve the 404
-  const response = await fetch(
-    `https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
-    {
+  const url =
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`;
+  
+      const response = await fetch(url, { 
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json" 
+      },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: fullPrompt }] }],
-        generationConfig: { maxOutputTokens: 1000, temperature: 0.7 },
-      }),
-    }
-  );
-
+        contents: [{ 
+          parts: [{ text: fullPrompt }] 
+        }]
+      })
+    });
+     
   if (!response.ok) throw new Error(`Gemini error: ${response.status}`);
   const data = await response.json();
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "Let me think about that!";
-  return { content: [{ type: "text", text }], provider: "gemini" };
+  
+  return data.candidates [0]. content.parts[0].text;
 }
 
 export default async function handler(req, res) {
