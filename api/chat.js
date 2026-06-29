@@ -1,12 +1,8 @@
 const Anthropic = require('@anthropic-ai/sdk');
 
-// Correct Node.js configuration exports for Vercel
 module.exports.config = {
-  maxDuration: 60,
-  dynamic: 'force-dynamic'
+  maxDuration: 60
 };
-
-// Initialize the official Anthropic client safely
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
@@ -78,7 +74,6 @@ async function tryGemini(messages, systemPrompt) {
   return { content: [{ type: "text", text }], provider: "gemini" };
 }
 
-// Correct CommonJS default export function handler
 module.exports = async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
