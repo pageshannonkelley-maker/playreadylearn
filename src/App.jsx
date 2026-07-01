@@ -186,10 +186,13 @@ function AgentChat({ agent, onClose }) {
         }),
       });
       const data = await response.json();
-      const reply = data.content?.[0]?.text || "Let me think about that...";
+      const reply = typeof data === "string"
+        ? data
+        : data?.content?.[0]?.text || data?.text || "Let me think about that...";
       saveMessages([...newMessages, { role: "assistant", content: reply }]);
     } catch (err) {
       console.error(err);
+      saveMessages([...newMessages, { role: "assistant", content: "I’m having trouble reaching my helper right now. Please try again in a moment." }]);
     } finally {
       setLoading(false);
     }
@@ -482,7 +485,9 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
         body: JSON.stringify({ messages: [{ role: "user", content: prompt }] }),
       });
       const data = await response.json();
-      const reply = data.content?.[0]?.text || "Let me think of something perfect for you!";
+      const reply = typeof data === "string"
+        ? data
+        : data?.content?.[0]?.text || data?.text || "Let me think of something perfect for you!";
       const newCount = responseCount + 1;
       setResponseCount(newCount);
       localStorage.setItem("prl_response_count", newCount.toString());
@@ -494,6 +499,8 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
       setMessages(newMessages);
     } catch (err) {
       console.error(err);
+      const fallbackReply = "I’m having trouble reaching my helper right now. Please try again in a moment.";
+      setMessages([{ role: "assistant", content: fallbackReply }]);
     } finally {
       setLoading(false);
     }
@@ -513,7 +520,9 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
         body: JSON.stringify({ messages: conversationMessages }),
       });
       const data = await response.json();
-      const reply = data.content?.[0]?.text || "Here's another idea!";
+      const reply = typeof data === "string"
+        ? data
+        : data?.content?.[0]?.text || data?.text || "Here's another idea!";
       const newCount = responseCount + 1;
       setResponseCount(newCount);
       localStorage.setItem("prl_response_count", newCount.toString());
@@ -522,6 +531,9 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
       setMessages(updatedMessages);
     } catch (err) {
       console.error(err);
+      const fallbackReply = "I’m having trouble reaching my helper right now. Please try again in a moment.";
+      const updatedMessages = [...messages, userMessage, { role: "assistant", content: fallbackReply }];
+      setMessages(updatedMessages);
     } finally {
       setLoading(false);
     }
