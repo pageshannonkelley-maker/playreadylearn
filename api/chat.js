@@ -68,7 +68,7 @@ async function tryGemini(messages, systemPrompt) {
 
   const fullPrompt = `${systemPrompt}\n\n${conversation ? `Previous conversation:\n${conversation}\n\n` : ""}User: ${lastMessage}\n\nAssistant:`;
 
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`;
   
   const response = await fetch(url, { 
     method: "POST",
@@ -122,7 +122,7 @@ export default async function handler(req, res) {
       const result = await tryGemini(messages, activeSystemPrompt);
       return res.status(200).json(result);
     } catch (geminiError) {
-      console.error("Both providers failed:", geminiError.message);
+      console.error("Both providers failed - Claude:", claudeError.message, "Gemini:", geminiError.message);
       return res.status(500).json({ error: "Service temporarily unavailable. Please try again." });
     }
   }
