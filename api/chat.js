@@ -36,7 +36,7 @@ async function tryClaude(messages, systemPrompt) {
       "anthropic-version": "2023-06-01"
     },
     body: JSON.stringify({
-      model: "claude-3-5-sonnet-20240620",
+      model: 'anthropic/claude-sonnet-4-6',
       max_tokens: 1000,
       system: systemPrompt,
       messages: messages.map(m => ({
@@ -60,25 +60,24 @@ async function tryGemini(messages, systemPrompt) {
 
   const fullPrompt = `${systemPrompt}\n\n${conversation ? `Previous conversation:\n${conversation}\n\n` : ""}User: ${lastMessage}\n\nAssistant:`;
 
-  const url =
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`;
   
-      const response = await fetch(url, { 
-      method: "POST",
-      headers: { 
-        "Content-Type": "application/json" 
-      },
-      body: JSON.stringify({
-        contents: [{ 
-          parts: [{ text: fullPrompt }] 
-        }]
-      })
-    });
+  const response = await fetch(url, { 
+    method: "POST",
+    headers: { 
+      "Content-Type": "application/json" 
+    },
+    body: JSON.stringify({
+      contents: [{ 
+        parts: [{ text: fullPrompt }] 
+      }]
+    })
+  });
      
   if (!response.ok) throw new Error(`Gemini error: ${response.status}`);
   const data = await response.json();
-  
-  return data.candidates [0]. content.parts[0].text;
+
+  return data.candidates[0].content.parts[0].text;
 }
 
 export default async function handler(req, res) {
