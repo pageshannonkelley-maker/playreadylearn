@@ -104,6 +104,7 @@ export default async function handler(req, res) {
   const activeSystemPrompt = systemPrompt || SUNNY_SYSTEM_PROMPT;
 
   const hasProviderKey = Boolean(process.env.ANTHROPIC_API_KEY || process.env.GEMINI_API_KEY);
+  console.log('ENV CHECK:', { hasAnthropicKey: !!process.env.ANTHROPIC_API_KEY, hasGeminiKey: !!process.env.GEMINI_API_KEY });
   if (!hasProviderKey) {
     return res.status(200).json({
       content: [{
