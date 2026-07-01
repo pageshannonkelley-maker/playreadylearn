@@ -27,6 +27,10 @@ When suggesting activities always include:
 
 Focus on: sensory play, outdoor activities, creative projects, reading, simple games, cooking together, nature exploration.`;
 
+function formatTextResponse(text) {
+  return { content: [{ type: "text", text }] };
+}
+
 async function tryClaude(messages, systemPrompt) {
   const response = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
@@ -36,7 +40,7 @@ async function tryClaude(messages, systemPrompt) {
       "anthropic-version": "2023-06-01"
     },
     body: JSON.stringify({
-      model: 'anthropic/claude-sonnet-4-6',
+      model: "claude-3-5-sonnet-latest",
       max_tokens: 1000,
       system: systemPrompt,
       messages: messages.map(m => ({
@@ -46,9 +50,13 @@ async function tryClaude(messages, systemPrompt) {
     }),
   });
 
-  if (!response.ok) throw new Error(`Claude error: ${response.status}`);
+  if (!response.ok) {
+    const body = await response.text().catch(() => "");
+    throw new Error(`Claude error: ${response.status} ${body.slice(0,300)}`);
+  }
   const data = await response.json();
-  return data.content[0].text; 
+  const text = data.content?.find(block => block.type === "text" && typeof block.text === "string")?.text || data.content?.[0]?.text || "";
+  return formatTextResponse(text);
 }
 
 async function tryGemini(messages, systemPrompt) {
@@ -73,20 +81,37 @@ async function tryGemini(messages, systemPrompt) {
       }]
     })
   });
-     
-  if (!response.ok) throw new Error(`Gemini error: ${response.status}`);
+  if (!response.ok) {
+    const body = await response.text().catch(() => "");
+    throw new Error(`Gemini error: ${response.status} ${body.slice(0,300)}`);
+  }
   const data = await response.json();
+  const text = data.candidates?.[0]?.content?.parts?.map(part => part.text).join("")?.trim() || "Let me think about that!";
 
-  return data.candidates[0].content.parts[0].text;
+  return formatTextResponse(text);
 }
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
-
-  const { messages, systemPrompt } = req.body;
+  const { messages, systemPrompt } = req.body || {};
+  // Basic validation to avoid uncaught runtime errors from malformed requests
+  if (!Array.isArray(messages) || messages.length === 0) {
+    console.warn('Invalid request to /api/chat - missing or empty messages', { messages });
+    return res.status(400).json({ error: 'Invalid request: "messages" must be a non-empty array' });
+  }
   const activeSystemPrompt = systemPrompt || SUNNY_SYSTEM_PROMPT;
+
+  const hasProviderKey = Boolean(process.env.ANTHROPIC_API_KEY || process.env.GEMINI_API_KEY);
+  if (!hasProviderKey) {
+    return res.status(200).json({
+      content: [{
+        type: "text",
+        text: "I’m here and ready to help! Tell me your child’s age, what you have nearby, and how much energy you have, and I’ll suggest a simple activity."
+      }]
+    });
+  }
 
   try {
     const result = await tryClaude(messages, activeSystemPrompt);
