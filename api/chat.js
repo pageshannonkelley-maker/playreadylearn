@@ -31,6 +31,14 @@ function formatTextResponse(text) {
   return { content: [{ type: "text", text }] };
 }
 
+function createFallbackResponse(message, debug) {
+  return {
+    content: [{ type: "text", text: message }],
+    fallback: true,
+    ...(debug ? { debug } : {}),
+  };
+}
+
 async function tryClaude(messages, systemPrompt) {
   const response = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
@@ -40,8 +48,8 @@ async function tryClaude(messages, systemPrompt) {
       "anthropic-version": "2023-06-01"
     },
     body: JSON.stringify({
-      model: "claude-3-5-sonnet-latest",
-      max_tokens: 1000,
+      model: "claude-3-5-haiku-latest",
+      max_tokens: 400,
       system: systemPrompt,
       messages: messages.map(m => ({
         role: m.role,
@@ -68,7 +76,7 @@ async function tryGemini(messages, systemPrompt) {
 
   const fullPrompt = `${systemPrompt}\n\n${conversation ? `Previous conversation:\n${conversation}\n\n` : ""}User: ${lastMessage}\n\nAssistant:`;
 
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${process.env.GEMINI_API_KEY}`;
   
   const response = await fetch(url, { 
     method: "POST",
@@ -124,15 +132,15 @@ export default async function handler(req, res) {
       return res.status(200).json(result);
     } catch (geminiError) {
       console.error("Both providers failed - Claude:", claudeError.message, "Gemini:", geminiError.message);
-      return res.status(500).json({
-        error: "Service temporarily unavailable. Please try again.",
-        debug: {
+      return res.status(200).json(createFallbackResponse(
+        "I’m having trouble reaching my helper right now. Please try again in a moment.",
+        {
           hasAnthropicKey: !!process.env.ANTHROPIC_API_KEY,
           hasGeminiKey: !!process.env.GEMINI_API_KEY,
           claudeError: claudeError.message,
-          geminiError: geminiError.message
+          geminiError: geminiError.message,
         }
-      });
+      ));
     }
   }
 }

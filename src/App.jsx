@@ -185,10 +185,18 @@ function AgentChat({ agent, onClose }) {
           systemPrompt: agent.systemPrompt,
         }),
       });
-      const data = await response.json();
+      let data = null;
+      try {
+        data = await response.json();
+      } catch {
+        data = null;
+      }
+
       const reply = typeof data === "string"
         ? data
-        : data?.content?.[0]?.text || data?.text || "Let me think about that...";
+        : data?.content?.[0]?.text || data?.text || (response.ok
+            ? "Let me think about that..."
+            : "I’m having trouble reaching my helper right now. Please try again in a moment.");
       saveMessages([...newMessages, { role: "assistant", content: reply }]);
     } catch (err) {
       console.error(err);
