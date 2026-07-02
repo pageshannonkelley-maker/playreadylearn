@@ -124,7 +124,15 @@ export default async function handler(req, res) {
       return res.status(200).json(result);
     } catch (geminiError) {
       console.error("Both providers failed - Claude:", claudeError.message, "Gemini:", geminiError.message);
-      return res.status(500).json({ error: "Service temporarily unavailable. Please try again." });
+      return res.status(500).json({
+        error: "Service temporarily unavailable. Please try again.",
+        debug: {
+          hasAnthropicKey: !!process.env.ANTHROPIC_API_KEY,
+          hasGeminiKey: !!process.env.GEMINI_API_KEY,
+          claudeError: claudeError.message,
+          geminiError: geminiError.message
+        }
+      });
     }
   }
 }
