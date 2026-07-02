@@ -104,7 +104,6 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
   const { messages, systemPrompt } = req.body || {};
-  // Basic validation to avoid uncaught runtime errors from malformed requests
   if (!Array.isArray(messages) || messages.length === 0) {
     console.warn('Invalid request to /api/chat - missing or empty messages', { messages });
     return res.status(400).json({ error: 'Invalid request: "messages" must be a non-empty array' });

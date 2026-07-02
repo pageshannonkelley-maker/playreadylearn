@@ -625,7 +625,7 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
           fontSize: "64px", boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
         }}>🌸</div>
         <h1 style={{ fontSize: "clamp(28px, 5vw, 48px)", color: COLORS.text, marginBottom: "8px" }}>
-  Intelligent Mother
+  Dedicated Mother
 </h1>
 
 <p style={{ fontSize: "16px", color: COLORS.lightText, minHeight: "24px" }}>
