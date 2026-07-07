@@ -1,5 +1,8 @@
 import { list } from "@vercel/blob";
-
+const { url } = await put('articles/blob.txt', 'Hello World!', {
+  access: 'public',
+  storeId: process.env.PUBLIC_BLOG_STORE_ID,
+});
 export const maxDuration = 60;
 export const dynamic = 'force-dynamic';
 
