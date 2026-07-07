@@ -29,7 +29,6 @@ export default function Blog() {
     }
   };
 
-  // Safe Date Formatting Helper Function
   const formatDate = (dateString) => {
     if (!dateString) return "Recently";
     const parsedDate = new Date(dateString);
