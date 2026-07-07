@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { getProfileLabel, getStoredProfiles, saveProfilesToStorage } from "./profileUtils";
 
 const COLORS = {
   bg: "#F5F0E8",
@@ -94,6 +95,16 @@ const AGENTS = [
     light: "#FFEBEE",
     intro: "Relationships take intention. What's on your heart today?",
     systemPrompt: `You are a warm, empathetic relationship guide for moms. Ask one question at a time. Key areas: who their significant other is, their likes and dislikes, their personality type, what the mom needs, what her concern is. Offer thoughtful, practical relationship advice. Never take sides. Keep responses warm, short, and supportive. Always remind them that professional counseling is available if needed.`,
+  },
+  {
+    id: "lesson-plans",
+    icon: "📘",
+    name: "Lesson Planner",
+    tagline: "Build plans by student",
+    color: "#5B4B8A",
+    light: "#EFE8FF",
+    intro: "I can help create lesson plans for your class. Which student or topic should we start with?",
+    systemPrompt: `You are a warm, organized lesson-planning assistant for teachers. Ask one question at a time. Help build lesson plans by student, topic, grade level, objective, standards, and available time. Suggest activities, materials, assessment ideas, and differentiation. Keep answers concise, practical, and ready to use.`,
   },
   {
     id: "fitness",
@@ -309,6 +320,15 @@ function ChildProfile({ child, onSave, onClose }) {
   const [age, setAge] = useState(child?.age || "");
   const [notes, setNotes] = useState(child?.notes || "");
   const [learning, setLearning] = useState(child?.learning || "");
+  const [profileType, setProfileType] = useState(child?.profileType || "child");
+
+  const profileLabel = getProfileLabel(profileType);
+  const editorSelectStyle = {
+    width: "100%", padding: "10px 14px", borderRadius: "8px",
+    border: `1px solid ${COLORS.border}`, background: COLORS.white,
+    color: COLORS.text, fontSize: "15px", fontFamily: "Georgia, serif",
+    cursor: "pointer", appearance: "auto",
+  };
 
   return (
     <div style={{
@@ -322,36 +342,43 @@ function ChildProfile({ child, onSave, onClose }) {
         boxShadow: "0 20px 60px rgba(0,0,0,0.2)",
       }}>
         <h2 style={{ color: COLORS.text, marginBottom: "24px", fontSize: "20px" }}>
-          👶 {child ? `Edit ${child.name}'s Profile` : "Add a Child"}
+          👶 {child ? `Edit ${child.name}'s ${profileLabel} Profile` : `Add a ${profileLabel}`}
         </h2>
         <div style={{ display: "grid", gap: "16px" }}>
           <div>
-            <label style={{ display: "block", fontSize: "13px", color: COLORS.lightText, marginBottom: "6px" }}>Child's Name</label>
+            <label style={{ display: "block", fontSize: "13px", color: COLORS.lightText, marginBottom: "6px" }}>Profile Type</label>
+            <select value={profileType} onChange={e => setProfileType(e.target.value)} style={editorSelectStyle}>
+              <option value="child">Child</option>
+              <option value="student">Student</option>
+            </select>
+          </div>
+          <div>
+            <label style={{ display: "block", fontSize: "13px", color: COLORS.lightText, marginBottom: "6px" }}>{profileLabel}'s Name</label>
             <input value={name} onChange={e => setName(e.target.value)}
               placeholder="e.g. Emma"
               style={{ width: "100%", padding: "10px 14px", borderRadius: "8px", border: `1px solid ${COLORS.border}`, fontSize: "15px", fontFamily: "Georgia, serif", boxSizing: "border-box" }} />
           </div>
           <div>
-            <label style={{ display: "block", fontSize: "13px", color: COLORS.lightText, marginBottom: "6px" }}>Age</label>
+            <label style={{ display: "block", fontSize: "13px", color: COLORS.lightText, marginBottom: "6px" }}>Age or Grade</label>
             <input value={age} onChange={e => setAge(e.target.value)}
               placeholder="e.g. 3 years old"
               style={{ width: "100%", padding: "10px 14px", borderRadius: "8px", border: `1px solid ${COLORS.border}`, fontSize: "15px", fontFamily: "Georgia, serif", boxSizing: "border-box" }} />
           </div>
           <div>
-            <label style={{ display: "block", fontSize: "13px", color: COLORS.lightText, marginBottom: "6px" }}>Learning Style</label>
+            <label style={{ display: "block", fontSize: "13px", color: COLORS.lightText, marginBottom: "6px" }}>Learning Style or Needs</label>
             <input value={learning} onChange={e => setLearning(e.target.value)}
               placeholder="e.g. Musical, Kinesthetic..."
               style={{ width: "100%", padding: "10px 14px", borderRadius: "8px", border: `1px solid ${COLORS.border}`, fontSize: "15px", fontFamily: "Georgia, serif", boxSizing: "border-box" }} />
           </div>
           <div>
-            <label style={{ display: "block", fontSize: "13px", color: COLORS.lightText, marginBottom: "6px" }}>Special Notes</label>
+            <label style={{ display: "block", fontSize: "13px", color: COLORS.lightText, marginBottom: "6px" }}>Notes for the agent</label>
             <textarea value={notes} onChange={e => setNotes(e.target.value)}
               placeholder="e.g. Has dyslexia, loves dinosaurs, in gifted program..."
               style={{ width: "100%", padding: "10px 14px", borderRadius: "8px", border: `1px solid ${COLORS.border}`, fontSize: "14px", fontFamily: "Georgia, serif", minHeight: "80px", resize: "vertical", boxSizing: "border-box" }} />
           </div>
         </div>
         <div style={{ display: "flex", gap: "12px", marginTop: "24px" }}>
-          <button onClick={() => onSave({ name, age, notes, learning })} style={{
+          <button onClick={() => onSave({ name, age, notes, learning, profileType })} style={{
             flex: 1, padding: "12px", borderRadius: "10px", border: "none",
             background: COLORS.accent, color: "#fff", fontWeight: "bold",
             fontSize: "15px", cursor: "pointer", fontFamily: "Georgia, serif",
@@ -417,8 +444,8 @@ function RotatingTagline() {
     const count = parseInt(localStorage.getItem("prl_response_count") || "0");
     setResponseCount(count);
     
-    const savedChildren = localStorage.getItem("prl_children");
-    if (savedChildren) setChildren(JSON.parse(savedChildren));
+    const savedProfiles = getStoredProfiles(localStorage);
+    if (savedProfiles.length > 0) setChildren(savedProfiles);
     
     const summaries = {};
     if (typeof AGENTS !== 'undefined') {
@@ -555,7 +582,7 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
       updated = [...children, childData];
     }
     setChildren(updated);
-    localStorage.setItem("prl_children", JSON.stringify(updated));
+    saveProfilesToStorage(updated, localStorage);
     setShowChildForm(false);
     setEditingChild(null);
   };
@@ -633,11 +660,48 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
 </p>
 </div>
       {/* Sunny Intake */}
-      <div style={{ maxWidth: "560px", margin: "24px auto", padding: "0 16px" }}>
-        <div style={{ background: COLORS.bg, border: `2px solid ${COLORS.border}`, borderRadius: "16px", padding: "32px" }}>
-          <h2 style={{ fontSize: "22px", color: COLORS.text, marginBottom: "4px", fontWeight: "bold" }}>Smart,Organized, Best Plan for Today" Moment</h2>
-          <p style={{ fontSize: "13px", color: COLORS.lightText, marginBottom: "24px" }}>(The AI Generator Intake)</p>
-          <p style={{ fontSize: "15px", color: COLORS.text, marginBottom: "20px", lineHeight: "1.6" }}>What will we do today?</p>
+      <div style={{ maxWidth: "680px", margin: "24px auto", padding: "0 16px" }}>
+        <div style={{
+          background: "linear-gradient(135deg, #F7EFD9 0%, #F2E4C9 100%)",
+          border: `3px solid ${COLORS.border}`,
+          borderRadius: "24px",
+          padding: "32px",
+          boxShadow: "0 12px 32px rgba(0,0,0,0.08)",
+        }}>
+          <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", gap: "16px", marginBottom: "20px" }}>
+            <div style={{ flex: 1, minWidth: "240px" }}>
+              <div style={{
+                display: "inline-block",
+                background: COLORS.accent,
+                color: "#fff",
+                padding: "6px 10px",
+                borderRadius: "999px",
+                fontSize: "12px",
+                fontWeight: "bold",
+                letterSpacing: "0.04em",
+                marginBottom: "10px",
+              }}>
+                Featured moment builder
+              </div>
+              <h2 style={{ fontSize: "28px", color: COLORS.text, marginBottom: "8px", fontWeight: "bold", lineHeight: "1.2" }}>
+                Create a calm, joyful moment for your child in minutes.
+              </h2>
+              <p style={{ fontSize: "15px", color: COLORS.lightText, lineHeight: "1.7", margin: 0 }}>
+                Sunny turns a few simple details into two playful ideas you can start right away.
+              </p>
+            </div>
+            <div style={{
+              minWidth: "180px",
+              background: "rgba(255,255,255,0.7)",
+              borderRadius: "14px",
+              padding: "12px 14px",
+              border: `1px solid ${COLORS.border}`,
+            }}>
+              <div style={{ fontSize: "13px", fontWeight: "bold", color: COLORS.text, marginBottom: "6px" }}>Why it matters</div>
+              <div style={{ fontSize: "12px", color: COLORS.lightText, lineHeight: "1.5" }}>Fast • Personalized • Parent-friendly</div>
+            </div>
+          </div>
+
           <div style={{ display: "grid", gap: "16px" }}>
             <div>
               <label style={labelStyle}>My little one is</label>
@@ -661,21 +725,25 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
               </select>
             </div>
             <div>
-              <label style={labelStyle}>I am feel...</label>
+              <label style={labelStyle}>I am feeling...</label>
               <select value={energy} onChange={e => setEnergy(e.target.value)} style={selectStyle}>
                 <option value="">Select energy level...</option>
                 {ENERGY_OPTIONS.map(e => <option key={e} value={e}>{e}</option>)}
               </select>
             </div>
             <button onClick={handleCreate} disabled={loading} style={{
-              padding: "14px", borderRadius: "10px", border: "none",
-              background: loading ? "#C4B49A" : COLORS.button,
+              padding: "14px", borderRadius: "12px", border: "none",
+              background: loading ? "#C4B49A" : "linear-gradient(135deg, #8B7355 0%, #6F5A3C 100%)",
               color: "#FFF8F0", fontSize: "16px", fontWeight: "bold",
               cursor: loading ? "not-allowed" : "pointer",
               fontFamily: "Georgia, serif", marginTop: "8px",
+              boxShadow: "0 8px 20px rgba(139, 115, 85, 0.24)",
             }}>
               {loading ? "Creating your moment... 🌿" : "Create Our Moment ✨"}
             </button>
+            <p style={{ margin: "0", textAlign: "center", fontSize: "13px", color: COLORS.lightText }}>
+              This is the heart of PlayReadyLearn — a simple tool for the everyday moments that matter most.
+            </p>
           </div>
         </div>
 
@@ -732,13 +800,13 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
       {/* Agent Dashboard */}
       <div style={{ maxWidth: "760px", margin: "40px auto", padding: "0 16px" }}>
         <div style={{ textAlign: "center", marginBottom: "24px" }}>
-          <h2 style={{ fontSize: "24px", color: COLORS.text, marginBottom: "6px" }}>Explore Sunny's specialized guides below — from meal planning to finances, she's got you covered.</h2>
-          <p style={{ fontSize: "14px", color: COLORS.lightText }}>Agentic AI assistant built for moms with families. </p>
+          <h2 style={{ fontSize: "24px", color: COLORS.text, marginBottom: "6px" }}>Explore Sunny's specialized guides below — from lesson planning to finances, she can support both families and classrooms.</h2>
+          <p style={{ fontSize: "14px", color: COLORS.lightText }}>A flexible agent dashboard for everyday support, personalized guidance, and content creation. </p>
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px" }}>
           {AGENTS.map(agent => (
-            <button key={agent.id} onClick={() => setActiveAgent(agent)} style={{
+            <button key={agent.id} type="button" onClick={() => setActiveAgent(agent)} style={{
               background: agent.light, border: `2px solid ${agent.color}`,
               borderRadius: "16px", padding: "20px", textAlign: "left",
               cursor: "pointer", fontFamily: "Georgia, serif",
@@ -750,8 +818,11 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
               <div style={{ fontSize: "32px", marginBottom: "8px" }}>{agent.icon}</div>
               <div style={{ fontWeight: "bold", color: agent.color, fontSize: "16px", marginBottom: "4px" }}>{agent.name}</div>
               <div style={{ fontSize: "12px", color: COLORS.lightText, marginBottom: agentSummaries[agent.id] ? "8px" : "0" }}>{agent.tagline}</div>
+              <div style={{ fontSize: "11px", color: COLORS.text, background: "rgba(255,255,255,0.65)", borderRadius: "6px", padding: "6px 8px", lineHeight: "1.4" }}>
+                Open this guide and start a conversation.
+              </div>
               {agentSummaries[agent.id] && (
-                <div style={{ fontSize: "11px", color: COLORS.text, background: "rgba(255,255,255,0.6)", borderRadius: "6px", padding: "6px 8px", lineHeight: "1.4" }}>
+                <div style={{ fontSize: "11px", color: COLORS.text, background: "rgba(255,255,255,0.85)", borderRadius: "6px", padding: "6px 8px", lineHeight: "1.4", marginTop: "8px" }}>
                   {agentSummaries[agent.id].slice(0, 60)}...
                 </div>
               )}
@@ -763,8 +834,8 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
         <div style={{ marginTop: "32px" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
             <div>
-              <h2 style={{ fontSize: "20px", color: COLORS.text, marginBottom: "4px" }}>👶 Child Profiles</h2>
-              <p style={{ fontSize: "13px", color: COLORS.lightText }}>Every child is unique — track each one separately.</p>
+              <h2 style={{ fontSize: "20px", color: COLORS.text, marginBottom: "4px" }}>👶 Profiles for guided support</h2>
+              <p style={{ fontSize: "13px", color: COLORS.lightText }}>Create a profile for a child, student, or learner so agents can personalize what they help with.</p>
             </div>
             {children.length < 3 && (
               <button onClick={() => { setEditingChild(null); setShowChildForm(true); }} style={{
@@ -777,7 +848,7 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
 
           {children.length === 0 ? (
             <div style={{ background: COLORS.bg, border: `2px dashed ${COLORS.border}`, borderRadius: "16px", padding: "32px", textAlign: "center" }}>
-              <p style={{ color: COLORS.lightText, fontSize: "14px", marginBottom: "16px" }}>Add up to 3 child profiles. Each profile helps Sunny personalize activities for that specific child.</p>
+              <p style={{ color: COLORS.lightText, fontSize: "14px", marginBottom: "16px" }}>Add up to 3 profiles. Each one helps the agents tailor ideas, lessons, or activities for that person.</p>
               <button onClick={() => setShowChildForm(true)} style={{
                 padding: "10px 24px", borderRadius: "10px", border: "none",
                 background: COLORS.accent, color: "#fff", fontWeight: "bold",
@@ -790,6 +861,7 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
                 <div key={i} style={{ background: COLORS.bg, border: `2px solid ${COLORS.border}`, borderRadius: "16px", padding: "20px" }}>
                   <div style={{ fontSize: "32px", marginBottom: "8px" }}>👶</div>
                   <div style={{ fontWeight: "bold", color: COLORS.text, fontSize: "18px", marginBottom: "4px" }}>{child.name}</div>
+                  <div style={{ fontSize: "12px", color: COLORS.accent, fontWeight: "bold", marginBottom: "4px", textTransform: "capitalize" }}>{child.profileType || "child"}</div>
                   <div style={{ fontSize: "13px", color: COLORS.lightText, marginBottom: "4px" }}>{child.age}</div>
                   {child.learning && <div style={{ fontSize: "12px", color: COLORS.accent, marginBottom: "4px" }}>🧠 {child.learning}</div>}
                   {child.notes && <div style={{ fontSize: "12px", color: COLORS.lightText, fontStyle: "italic", marginBottom: "12px" }}>{child.notes}</div>}
