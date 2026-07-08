@@ -10,9 +10,10 @@ export default async function handler(req, res) {
   }
 
   try {
-const response = await list({
-    token: process.env.PUBLIC_BLOG_READ_WRITE_TOKEN,
-});
+    const { blobs } = await list({
+      token: process.env.PUBLIC_BLOG_READ_WRITE_TOKEN || process.env.BLOB_READ_WRITE_TOKEN,
+      prefix: "blog/",
+    });
 
     const posts = await Promise.all(
       blobs.map(async (blob) => {
