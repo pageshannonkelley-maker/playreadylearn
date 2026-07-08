@@ -128,16 +128,25 @@ const AGENTS = [
   }, 
 ];
 function App() {
-  const [childProfiles, setChildProfiles] = useState(() => {
-  const saved = localStorage.getItem("prl_child_profiles");
-  return saved ? JSON.parse(saved) : [];
-});
+function buildChildAgent(child, index) {
+  const label = child.profileType === "student" ? "student" : "child";
+  const contextBits = [];
+  if (child.age) contextBits.push(`age/grade: ${child.age}`);
+  if (child.learning) contextBits.push(`learns best through: ${child.learning}`);
+  if (child.notes) contextBits.push(`notes: ${child.notes}`);
+  const context = contextBits.length ? ` (${contextBits.join("; ")})` : "";
 
-const [activeChildAgentId, setActiveChildAgentId] = useState(null);
-
-const handleSelectChildAgent = (child) => {
-  setActiveChildAgentId(child.id);
-}; 
+  return {
+    id: `profile-${index}`,
+    icon: "👶",
+    name: `${child.name || "Profile"}'s Guide`,
+    tagline: `Personalized for ${child.name || "this profile"}`,
+    color: "#7A9E7E",
+    light: "#F5F0E8",
+    intro: `Hi! I'm here to help with ${child.name || "this profile"} specifically${context}. What would you like guidance on today?`,
+    systemPrompt: `You are Sunny, PlayReadyLearn's warm activity and parenting guide. You are speaking with a parent/teacher about their ${label} named ${child.name || "this profile"}${context}. Personalize every suggestion specifically for this profile — reference their age, learning style, and notes where relevant. Ask one question at a time. Keep responses short, warm, and practical.`,
+  };
+}
 function CookieBanner({ onAccept }) {
   return (
     <div style={{  
@@ -187,6 +196,8 @@ function AgentChat({ agent, onClose }) {
     saveMessages(newMessages);
     setInput("");
     setLoading(true);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 25000);
     try {
       const response = await fetch("/api/chat", {
         method: "POST",
@@ -195,6 +206,7 @@ function AgentChat({ agent, onClose }) {
           messages: newMessages.map(m => ({ role: m.role === "assistant" ? "assistant" : "user", content: m.content })),
           systemPrompt: agent.systemPrompt,
         }),
+        signal: controller.signal,
       });
       let data = null;
       try {
@@ -213,6 +225,7 @@ function AgentChat({ agent, onClose }) {
       console.error(err);
       saveMessages([...newMessages, { role: "assistant", content: "I’m having trouble reaching my helper right now. Please try again in a moment." }]);
     } finally {
+      clearTimeout(timeoutId);
       setLoading(false);
     }
   };
@@ -423,6 +436,22 @@ function RotatingTagline() {
   return () => clearInterval(interval);
 }, []);
 
+  return (
+    <p style={{
+      fontSize: "18px",
+      color: COLORS.lightText,
+      marginBottom: "8px",
+      transition: "opacity 0.5s ease",
+      opacity: visible ? 1 : 0,
+      minHeight: "28px",
+    }}>
+      {TAGLINES[index]}
+    </p>
+  );
+}
+
+  const [age, setAge] = useState("");
+  const [item, setItem] = useState("");
   const [energy, setEnergy] = useState("");
   const [intelligence, setIntelligence] = useState("");
   const [messages, setMessages] = useState([]);
@@ -513,11 +542,14 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
     setShowChat(true);
     setLoading(true);
     setMessages([{ role: "user", content: prompt }]);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 25000);
     try {
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messages: [{ role: "user", content: prompt }] }),
+        signal: controller.signal,
       });
       const data = await response.json();
       const reply = typeof data === "string"
@@ -537,6 +569,7 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
       const fallbackReply = "I’m having trouble reaching my helper right now. Please try again in a moment.";
       setMessages([{ role: "assistant", content: fallbackReply }]);
     } finally {
+      clearTimeout(timeoutId);
       setLoading(false);
     }
   };
@@ -548,11 +581,14 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
     setMessages([...messages, userMessage]);
     setInput("");
     setLoading(true);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 25000);
     try {
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messages: conversationMessages }),
+        signal: controller.signal,
       });
       const data = await response.json();
       const reply = typeof data === "string"
@@ -570,6 +606,7 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
       const updatedMessages = [...messages, userMessage, { role: "assistant", content: fallbackReply }];
       setMessages(updatedMessages);
     } finally {
+      clearTimeout(timeoutId);
       setLoading(false);
     }
   };
@@ -865,11 +902,18 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
                   <div style={{ fontSize: "13px", color: COLORS.lightText, marginBottom: "4px" }}>{child.age}</div>
                   {child.learning && <div style={{ fontSize: "12px", color: COLORS.accent, marginBottom: "4px" }}>🧠 {child.learning}</div>}
                   {child.notes && <div style={{ fontSize: "12px", color: COLORS.lightText, fontStyle: "italic", marginBottom: "12px" }}>{child.notes}</div>}
-                  <button onClick={() => { setEditingChild(i); setShowChildForm(true); }} style={{
-                    background: "transparent", border: `1px solid ${COLORS.border}`,
-                    borderRadius: "6px", padding: "4px 12px", fontSize: "12px",
-                    color: COLORS.lightText, cursor: "pointer", fontFamily: "Georgia, serif",
-                  }}>Edit</button>
+                  <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                    <button onClick={() => setActiveAgent(buildChildAgent(child, i))} style={{
+                      background: COLORS.accent, border: "none",
+                      borderRadius: "6px", padding: "6px 12px", fontSize: "12px",
+                      color: "#fff", fontWeight: "bold", cursor: "pointer", fontFamily: "Georgia, serif",
+                    }}>💬 Chat about {child.name || "this profile"}</button>
+                    <button onClick={() => { setEditingChild(i); setShowChildForm(true); }} style={{
+                      background: "transparent", border: `1px solid ${COLORS.border}`,
+                      borderRadius: "6px", padding: "6px 12px", fontSize: "12px",
+                      color: COLORS.lightText, cursor: "pointer", fontFamily: "Georgia, serif",
+                    }}>Edit</button>
+                  </div>
                 </div>
               ))}
               {children.length < 3 && (
@@ -899,7 +943,5 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
       </footer>
     </div>
   );
- }
 }
 export default App;
-
