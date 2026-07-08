@@ -23,18 +23,10 @@ export default function Blog() {
       const data = await response.json();
       setPosts(data.posts || []);
     } catch (err) {
-      console.error("🚨 Error loading posts:", err);
+      console.error(err);
     } finally {
       setLoading(false);
     }
-  };
-
-  const formatDate = (dateString) => {
-    if (!dateString) return "Recently";
-    const parsedDate = new Date(dateString);
-    return isNaN(parsedDate.getTime()) 
-      ? "Recently" 
-      : parsedDate.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
   };
 
   if (selectedPost) {
@@ -48,22 +40,22 @@ export default function Blog() {
         </nav>
         <div style={{ maxWidth: "720px", margin: "40px auto", padding: "0 16px" }}>
           <div style={{ background: COLORS.accent, color: "#fff", display: "inline-block", borderRadius: "20px", padding: "4px 14px", fontSize: "12px", marginBottom: "16px" }}>
-            {selectedPost.category || "General"}
+            {selectedPost.category}
           </div>
           <h1 style={{ fontSize: "clamp(24px, 4vw, 40px)", color: COLORS.text, marginBottom: "16px", lineHeight: "1.2" }}>
-            {selectedPost.title || "Untitled Post"}
+            {selectedPost.title}
           </h1>
           <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "32px" }}>
             <span style={{ fontSize: "28px" }}>🌸</span>
             <div>
-              <div style={{ fontWeight: "bold", color: COLORS.text, fontSize: "14px" }}>{selectedPost.author || "PlayReadyLearn"}</div>
+              <div style={{ fontWeight: "bold", color: COLORS.text, fontSize: "14px" }}>{selectedPost.author}</div>
               <div style={{ fontSize: "12px", color: COLORS.lightText }}>
-                {formatDate(selectedPost.publishedAt)}
+                {new Date(selectedPost.publishedAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
               </div>
             </div>
           </div>
           <div style={{ fontSize: "16px", color: COLORS.text, lineHeight: "1.9", whiteSpace: "pre-wrap" }}>
-            {selectedPost.content || "No content available."}
+            {selectedPost.content}
           </div>
           <div style={{ marginTop: "48px", padding: "24px", background: COLORS.bg, borderRadius: "16px", border: `1px solid ${COLORS.border}`, textAlign: "center" }}>
             <p style={{ color: COLORS.text, fontSize: "15px", marginBottom: "16px" }}>Ready to try these ideas with your child?</p>
@@ -110,13 +102,13 @@ export default function Blog() {
                 onMouseOut={e => e.currentTarget.style.boxShadow = "none"}
               >
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "12px" }}>
-                  <span style={{ background: COLORS.accent, color: "#fff", borderRadius: "20px", padding: "4px 14px", fontSize: "12px" }}>{post.category || "General"}</span>
+                  <span style={{ background: COLORS.accent, color: "#fff", borderRadius: "20px", padding: "4px 14px", fontSize: "12px" }}>{post.category}</span>
                   <span style={{ fontSize: "12px", color: COLORS.lightText }}>
-                    {formatDate(post.publishedAt)}
+                    {new Date(post.publishedAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
                   </span>
                 </div>
-                <h2 style={{ fontSize: "20px", color: COLORS.text, marginBottom: "10px", lineHeight: "1.3" }}>{post.title || "Untitled Post"}</h2>
-                <p style={{ fontSize: "14px", color: COLORS.lightText, lineHeight: "1.6" }}>{post.excerpt || "Click read more to view this post."}</p>
+                <h2 style={{ fontSize: "20px", color: COLORS.text, marginBottom: "10px", lineHeight: "1.3" }}>{post.title}</h2>
+                <p style={{ fontSize: "14px", color: COLORS.lightText, lineHeight: "1.6" }}>{post.excerpt}</p>
                 <div style={{ marginTop: "16px", fontSize: "13px", color: COLORS.accent, fontWeight: "bold" }}>Read more →</div>
               </div>
             ))}

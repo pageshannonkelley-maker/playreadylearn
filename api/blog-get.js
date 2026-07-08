@@ -1,27 +1,32 @@
 import { list } from "@vercel/blob";
 
-export default async function handler(req, res) {
-  try {
-    const { blobs } = await list({
-      token: process.env.PUBLIC_BLOG_READ_WRITE_TOKEN,
-    });
+export const config = {
+  maxDuration: 60,
+};
 
-    const blogFiles = blobs.filter(blob => blob.pathname.startsWith("blog/"));
+export default async function handler(req, res) {
+  if (req.method !== "GET" && req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
+
+  try {
+const response = await list({
+    token: process.env.PUBLIC_BLOG_READ_WRITE_TOKEN,
+});
+
     const posts = await Promise.all(
-      blogFiles.map(async (blob) => {
-        const fileResponse = await fetch(blob.url);
-        const fileData = await fileResponse.json();
-        return {
-          ...fileData, 
-          url: blob.url, 
-        };
+      blobs.map(async (blob) => {
+        const response = await fetch(blob.url);
+        const text = await response.text();
+        return JSON.parse(text);
       })
     );
 
-    return res.status(200).json({ posts });
+    posts.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
 
-  } catch (error) {
-    console.error("🚨 Error parsing blog files:", error);
-    return res.status(500).json({ error: "Failed to load blog posts" });
+    return res.status(200).json({ posts });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: err.message });
   }
 }
