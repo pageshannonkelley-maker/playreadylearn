@@ -1,5 +1,9 @@
 import { useState, useEffect } from "react";
 import { getProfileLabel, getStoredProfiles, saveProfilesToStorage } from "./profileUtils";
+import Blog from "./Blog";
+import Admin from "./Admin";
+import PrivacyPolicy from "./PrivacyPolicy";
+import TermsOfService from "./TermsOfService";
 
 const COLORS = {
   bg: "#F5F0E8",
@@ -635,6 +639,14 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
     display: "block", fontSize: "15px", color: COLORS.text,
     fontFamily: "Georgia, serif", marginBottom: "6px",
   };
+
+  if (window.location.pathname === "/blog") {
+    return <Blog />;
+  }
+
+  if (window.location.pathname === "/admin") {
+    return <Admin />;
+  }
 
   if (window.location.pathname === "/privacy") {
     return <PrivacyPolicy app="playreadylearn" />;
