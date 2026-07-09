@@ -128,7 +128,10 @@ export default async function handler(req, res) {
     console.warn("Claude failed, trying Gemini:", claudeError.message);
     try {
       const result = await tryGemini(messages, activeSystemPrompt);
-      return res.status(200).json(result);
+      // TEMPORARY DIAGNOSTIC: surface why Claude failed even though Gemini
+      // succeeded, so this is visible without waiting for a full outage.
+      // Safe to remove once Claude is confirmed working again.
+      return res.status(200).json({ ...result, claudeFailureReason: claudeError.message });
     } catch (geminiError) {
       console.error("Both providers failed - Claude:", claudeError.message, "Gemini:", geminiError.message);
       return res.status(200).json(createFallbackResponse(
