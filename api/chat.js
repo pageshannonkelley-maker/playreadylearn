@@ -27,8 +27,8 @@ When suggesting activities always include:
 
 Focus on: sensory play, outdoor activities, creative projects, reading, simple games, cooking together, nature exploration.`;
 
-function formatTextResponse(text) {
-  return { content: [{ type: "text", text }] };
+function formatTextResponse(text, provider) {
+  return { content: [{ type: "text", text }], provider };
 }
 
 function createFallbackResponse(message, debug) {
@@ -64,7 +64,7 @@ async function tryClaude(messages, systemPrompt) {
   }
   const data = await response.json();
   const text = data.content?.find(block => block.type === "text" && typeof block.text === "string")?.text || data.content?.[0]?.text || "";
-  return formatTextResponse(text);
+  return formatTextResponse(text, "claude");
 }
 
 async function tryGemini(messages, systemPrompt) {
@@ -96,7 +96,7 @@ async function tryGemini(messages, systemPrompt) {
   const data = await response.json();
   const text = data.candidates?.[0]?.content?.parts?.map(part => part.text).join("")?.trim() || "Let me think about that!";
 
-  return formatTextResponse(text);
+  return formatTextResponse(text, "gemini");
 }
 
 export default async function handler(req, res) {
