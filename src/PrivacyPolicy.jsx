@@ -1,9 +1,5 @@
 import { useState } from "react";
 
-// Usage:
-// <PrivacyPolicy app="transitionready" /> for TransitionReady
-// <PrivacyPolicy app="playreadylearn" /> for PlayReadyLearn
-
 const config = {
   transitionready: {
     name: "TransitionReady",
@@ -37,7 +33,7 @@ const config = {
 
 export default function PrivacyPolicy({ app = "transitionready" }) {
   const c = config[app];
-  const effectiveDate = "May 11, 2025";
+  const effectiveDate = "May 2026";
 
   return (
     <div style={{
