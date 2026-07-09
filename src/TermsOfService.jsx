@@ -1,6 +1,3 @@
-// Usage:
-// <TermsOfService app="transitionready" /> for TransitionReady
-// <TermsOfService app="playreadylearn" /> for PlayReadyLearn
 
 const config = {
   transitionready: {
@@ -35,7 +32,7 @@ const config = {
 
 export default function TermsOfService({ app = "transitionready" }) {
   const c = config[app];
-  const effectiveDate = "May 11, 2025";
+  const effectiveDate = "May 2026";
 
   return (
     <div style={{
