@@ -4,6 +4,7 @@ import Blog from "./Blog";
 import Admin from "./Admin";
 import PrivacyPolicy from "./PrivacyPolicy";
 import TermsOfService from "./TermsOfService";
+import ContactForm from "./ContactForm";
 
 const COLORS = {
   bg: "#F5F0E8",
@@ -655,6 +656,10 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
   if (window.location.pathname === "/terms") {
     return <TermsOfService app="playreadylearn" />;
   }
+
+  if (window.location.pathname === "/contact") {
+    return <ContactForm />;
+  }
   return (
     <div style={{ minHeight: "100vh", background: "#FAF7F2", fontFamily: "Georgia, serif", paddingBottom: cookiesAccepted ? "0" : "80px" }}>
       {!cookiesAccepted && <CookieBanner onAccept={handleAcceptCookies} />}
@@ -686,6 +691,9 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
   <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
     <span onClick={() => window.location.assign("/blog")} style={{ color: "#E8DCC8", fontSize: "16px", fontFamily: "Georgia, serif", fontWeight: "bold", cursor: "pointer" }}>
       Blog 🌸
+    </span>
+    <span onClick={() => window.location.assign("/contact")} style={{ color: "#E8DCC8", fontSize: "16px", fontFamily: "Georgia, serif", fontWeight: "bold", cursor: "pointer" }}>
+      📬 Get Updates from Sunny
     </span>
     <span style={{ color: "#E8DCC8", fontSize: "13px" }}>Raising brilliant children starts with you.</span>
   </div>
