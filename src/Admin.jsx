@@ -28,6 +28,7 @@ export default function Admin() {
   const [category, setCategory] = useState("");
   const [generating, setGenerating] = useState(false);
   const [generatedPost, setGeneratedPost] = useState(null);
+  const [manualPost, setManualPost] = useState({ title: "", excerpt: "", content: "" });
   const [saving, setSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [error, setError] = useState("");
@@ -92,7 +93,13 @@ FORMAT YOUR RESPONSE AS JSON ONLY (no markdown, no backticks):
     }
   };
 
-  const savePost = async () => {
+  const savePost = async (postToSave = generatedPost) => {
+  if (!postToSave?.title || !postToSave?.excerpt || !postToSave?.content || !category) {
+    setError("Please add a title, excerpt, content, and category before publishing.");
+    return;
+  }
+
+  setError("");
   setSaving(true);
   try {
     const response = await fetch("/api/blog-save", {
@@ -101,13 +108,14 @@ FORMAT YOUR RESPONSE AS JSON ONLY (no markdown, no backticks):
       body: JSON.stringify({
         secret: "PlayReady2026",
         category,
-        post: generatedPost,
+        post: postToSave,
       }),
     });
     const data = await response.json();
     if (data.success) {
       setSaveSuccess(true);
       setGeneratedPost(null);
+      setManualPost({ title: "", excerpt: "", content: "" });
       setTopic("");
       setCategory("");
       setTimeout(() => setSaveSuccess(false), 3000);
@@ -153,7 +161,7 @@ FORMAT YOUR RESPONSE AS JSON ONLY (no markdown, no backticks):
 
       <div style={{ maxWidth: "720px", margin: "40px auto", padding: "0 16px" }}>
         <h1 style={{ fontSize: "28px", color: COLORS.text, marginBottom: "8px" }}>Write a Blog Post 🌸</h1>
-        <p style={{ fontSize: "14px", color: COLORS.lightText, marginBottom: "32px" }}>Enter a topic and Sunny will write a full post for you to review and publish.</p>
+        <p style={{ fontSize: "14px", color: COLORS.lightText, marginBottom: "32px" }}>Write a post manually, or enter a topic and let Sunny draft one for you to review and publish.</p>
 
         {saveSuccess && (
           <div style={{ background: "#E8F5E9", border: "1px solid #4CAF50", borderRadius: "10px", padding: "16px", marginBottom: "24px", color: "#2E7D32", fontWeight: "bold" }}>
@@ -167,7 +175,64 @@ FORMAT YOUR RESPONSE AS JSON ONLY (no markdown, no backticks):
           </div>
         )}
 
+        <div style={{ background: COLORS.white, border: `2px solid ${COLORS.border}`, borderRadius: "16px", padding: "32px", marginBottom: "24px" }}>
+          <h2 style={{ color: COLORS.text, fontSize: "22px", marginBottom: "8px" }}>Manual Blog Post</h2>
+          <p style={{ color: COLORS.lightText, fontSize: "14px", marginBottom: "24px" }}>Paste or write your finished post here, then publish it directly to your public Blob blog store.</p>
+
+          <div style={{ marginBottom: "16px" }}>
+            <label style={{ display: "block", fontSize: "14px", color: COLORS.lightText, marginBottom: "6px" }}>Title</label>
+            <input
+              value={manualPost.title}
+              onChange={e => setManualPost({ ...manualPost, title: e.target.value })}
+              placeholder="e.g. 5 Play-Based Reading Ideas for Preschoolers"
+              style={{ width: "100%", padding: "12px 16px", borderRadius: "10px", border: `1px solid ${COLORS.border}`, fontSize: "15px", fontFamily: "Georgia, serif", boxSizing: "border-box" }}
+            />
+          </div>
+
+          <div style={{ marginBottom: "16px" }}>
+            <label style={{ display: "block", fontSize: "14px", color: COLORS.lightText, marginBottom: "6px" }}>Excerpt</label>
+            <textarea
+              value={manualPost.excerpt}
+              onChange={e => setManualPost({ ...manualPost, excerpt: e.target.value })}
+              placeholder="A short summary that will show on the blog list."
+              rows={3}
+              style={{ width: "100%", padding: "12px 16px", borderRadius: "10px", border: `1px solid ${COLORS.border}`, fontSize: "15px", fontFamily: "Georgia, serif", boxSizing: "border-box", resize: "vertical" }}
+            />
+          </div>
+
+          <div style={{ marginBottom: "16px" }}>
+            <label style={{ display: "block", fontSize: "14px", color: COLORS.lightText, marginBottom: "6px" }}>Full Post</label>
+            <textarea
+              value={manualPost.content}
+              onChange={e => setManualPost({ ...manualPost, content: e.target.value })}
+              placeholder="Write or paste the full blog post here. Paragraph breaks will be preserved."
+              rows={12}
+              style={{ width: "100%", padding: "12px 16px", borderRadius: "10px", border: `1px solid ${COLORS.border}`, fontSize: "15px", fontFamily: "Georgia, serif", boxSizing: "border-box", resize: "vertical", lineHeight: "1.7" }}
+            />
+          </div>
+
+          <div style={{ marginBottom: "24px" }}>
+            <label style={{ display: "block", fontSize: "14px", color: COLORS.lightText, marginBottom: "6px" }}>Category</label>
+            <select value={category} onChange={e => setCategory(e.target.value)}
+              style={{ width: "100%", padding: "12px 16px", borderRadius: "10px", border: `1px solid ${COLORS.border}`, fontSize: "15px", fontFamily: "Georgia, serif", background: COLORS.white }}>
+              <option value="">Select a category...</option>
+              {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+            </select>
+          </div>
+
+          <button onClick={() => savePost(manualPost)} disabled={saving} style={{
+            width: "100%", padding: "14px", borderRadius: "10px", border: "none",
+            background: saving ? "#C4B49A" : COLORS.accent,
+            color: "#fff", fontSize: "16px", fontWeight: "bold",
+            cursor: saving ? "not-allowed" : "pointer", fontFamily: "Georgia, serif",
+          }}>
+            {saving ? "Publishing..." : "Publish Manual Post 🌿"}
+          </button>
+        </div>
+
         <div style={{ background: COLORS.bg, border: `2px solid ${COLORS.border}`, borderRadius: "16px", padding: "32px", marginBottom: "24px" }}>
+          <h2 style={{ color: COLORS.text, fontSize: "22px", marginBottom: "8px" }}>Generate with Sunny</h2>
+          <p style={{ color: COLORS.lightText, fontSize: "14px", marginBottom: "24px" }}>Enter a topic and Sunny will write a full post for you to review before publishing.</p>
           <div style={{ marginBottom: "16px" }}>
             <label style={{ display: "block", fontSize: "14px", color: COLORS.lightText, marginBottom: "6px" }}>Blog Topic</label>
             <input
