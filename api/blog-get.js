@@ -1,4 +1,4 @@
-import { list, get } from "@vercel/blob";
+import { list } from "@vercel/blob";
 
 export const config = {
   maxDuration: 60,
@@ -10,16 +10,15 @@ export default async function handler(req, res) {
   }
 
   try {
-    const token = process.env.PUBLIC_BLOG_READ_WRITE_TOKEN || process.env.BLOB_READ_WRITE_TOKEN;
     const { blobs } = await list({
-      token,
+      token: process.env.PUBLIC_BLOG_READ_WRITE_TOKEN || process.env.BLOB_READ_WRITE_TOKEN,
       prefix: "blog/",
     });
 
     const posts = await Promise.all(
       blobs.map(async (blob) => {
-        const result = await get(blob.url, { access: "private", token });
-        const text = await new Response(result.stream).text();
+        const response = await fetch(blob.url);
+        const text = await response.text();
         return JSON.parse(text);
       })
     );

@@ -27,7 +27,7 @@ export default async function handler(req, res) {
     };
 
     await put(`blog/${id}.json`, JSON.stringify(postData), {
-      access: "private",
+      access: "public",
       contentType: "application/json",
       token: process.env.PUBLIC_BLOG_READ_WRITE_TOKEN || process.env.BLOB_READ_WRITE_TOKEN,
     });
