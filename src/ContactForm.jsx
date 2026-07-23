@@ -41,6 +41,12 @@ export default function ContactForm() {
       });
       const data = await response.json();
       if (data.success) {
+        if (typeof window !== "undefined" && typeof window.gtag === "function") {
+          window.gtag("event", "claude_lead_captured", {
+            event_category: "engagement",
+            event_label: "playreadylearn_contact_form",
+          });
+        }
         setSubmitted(true);
         setName("");
         setEmail("");
