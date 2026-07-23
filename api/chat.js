@@ -39,7 +39,7 @@ function createFallbackResponse(message, debug) {
   };
 }
 
-async function tryClaude(messages, systemPrompt) {
+async function tryClaude(messages, systemPrompt, maxTokens) {
   const response = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: {
@@ -49,7 +49,7 @@ async function tryClaude(messages, systemPrompt) {
     },
     body: JSON.stringify({
       model: "claude-haiku-4-5-20251001",
-      max_tokens: 400,
+      max_tokens: maxTokens,
       system: systemPrompt,
       messages: messages.map(m => ({
         role: m.role,
@@ -103,12 +103,18 @@ export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
-  const { messages, systemPrompt } = req.body || {};
+  const { messages, systemPrompt, maxTokens } = req.body || {};
   if (!Array.isArray(messages) || messages.length === 0) {
     console.warn('Invalid request to /api/chat - missing or empty messages', { messages });
     return res.status(400).json({ error: 'Invalid request: "messages" must be a non-empty array' });
   }
   const activeSystemPrompt = systemPrompt || SUNNY_SYSTEM_PROMPT;
+  // Default raised from 400 to 2000: 400 was cutting off longer generations
+  // (e.g. the Admin panel's "Generate Post with Sunny" blog posts, which ask
+  // for 400-600 words plus JSON structure — comfortably more than 400 tokens),
+  // producing truncated, invalid JSON that failed to parse. Callers can still
+  // pass a smaller/larger maxTokens explicitly if needed.
+  const activeMaxTokens = Number.isFinite(maxTokens) && maxTokens > 0 ? maxTokens : 2000;
 
   const hasProviderKey = Boolean(process.env.ANTHROPIC_API_KEY || process.env.GEMINI_API_KEY);
   console.log('ENV CHECK:', { hasAnthropicKey: !!process.env.ANTHROPIC_API_KEY, hasGeminiKey: !!process.env.GEMINI_API_KEY });
@@ -122,7 +128,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const result = await tryClaude(messages, activeSystemPrompt);
+    const result = await tryClaude(messages, activeSystemPrompt, activeMaxTokens);
     return res.status(200).json(result);
   } catch (claudeError) {
     console.warn("Claude failed, trying Gemini:", claudeError.message);
