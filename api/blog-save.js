@@ -10,7 +10,7 @@ export default async function handler(req, res) {
 
   const { post, category, secret } = req.body;
 
-  if (secret !== "PlayReady2026") {
+  if (!process.env.BLOG_ADMIN_PASSWORD || secret !== process.env.BLOG_ADMIN_PASSWORD) {
     return res.status(401).json({ error: "Unauthorized" });
   }
 

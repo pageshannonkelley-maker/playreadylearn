@@ -33,12 +33,25 @@ export default function Admin() {
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [error, setError] = useState("");
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
   e.preventDefault();
-  if (password === "PlayReady2026") {
-    setAuthenticated(true);
-  } else {
-    alert("Incorrect password");
+  setError("");
+
+  try {
+    const response = await fetch("/api/admin-login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password }),
+    });
+    const data = await response.json();
+
+    if (data.success) {
+      setAuthenticated(true);
+    } else {
+      setError("Incorrect password");
+    }
+  } catch (err) {
+    setError("Unable to verify password. Please try again.");
   }
 };
   const generatePost = async () => {
@@ -106,7 +119,7 @@ FORMAT YOUR RESPONSE AS JSON ONLY (no markdown, no backticks):
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        secret: "PlayReady2026",
+        secret: password,
         category,
         post: postToSave,
       }),
