@@ -283,7 +283,7 @@ FORMAT YOUR RESPONSE AS JSON ONLY (no markdown, no backticks):
               {generatedPost.content}
             </div>
             <div style={{ display: "flex", gap: "12px" }}>
-              <button onClick={savePost} disabled={saving} style={{
+              <button onClick={() => savePost(generatedPost)} disabled={saving} style={{
                 flex: 1, padding: "14px", borderRadius: "10px", border: "none",
                 background: saving ? "#C4B49A" : COLORS.accent,
                 color: "#fff", fontSize: "16px", fontWeight: "bold",
