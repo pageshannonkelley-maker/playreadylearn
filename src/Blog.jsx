@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import SocialIconLinks from "./SocialIconLinks";
 
 const COLORS = {
   bg: "#F5F0E8",
@@ -66,6 +67,7 @@ export default function Blog() {
         </div>
         <footer style={{ textAlign: "center", padding: "32px 20px", color: COLORS.lightText, fontSize: "13px", marginTop: "40px", borderTop: `1px solid ${COLORS.border}` }}>
           <p>© {new Date().getFullYear()} PlayReadyLearn — A Ready Learning LLC Product</p>
+          <SocialIconLinks />
         </footer>
       </div>
     );
@@ -117,6 +119,7 @@ export default function Blog() {
       </div>
       <footer style={{ textAlign: "center", padding: "32px 20px", color: COLORS.lightText, fontSize: "13px", marginTop: "40px", borderTop: `1px solid ${COLORS.border}`, fontFamily: "Georgia, serif" }}>
         <p>© {new Date().getFullYear()} PlayReadyLearn — A Ready Learning LLC Product</p>
+        <SocialIconLinks />
         <div style={{ marginTop: "12px", display: "flex", justifyContent: "center", gap: "16px" }}>
           <a href="/privacy" style={{ color: COLORS.lightText, textDecoration: "none" }}>Privacy Policy</a>
           <span>·</span>

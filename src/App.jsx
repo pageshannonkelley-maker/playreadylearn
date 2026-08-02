@@ -5,6 +5,7 @@ import Admin from "./Admin";
 import PrivacyPolicy from "./PrivacyPolicy";
 import TermsOfService from "./TermsOfService";
 import ContactForm from "./ContactForm";
+import SocialIconLinks from "./SocialIconLinks";
 
 const COLORS = {
   bg: "#F5F0E8",
@@ -953,6 +954,7 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
         <p>© {new Date().getFullYear()} PlayReadyLearn — A Ready Learning LLC Product</p>
         <p style={{ marginTop: "6px" }}>Making every day a learning adventure. 🌿</p>
         For school-age children, visit <a href="https://transitionready.tech" style={{color: COLORS.accent, textDecoration: "none"}}>TransitionReady →</a>
+        <SocialIconLinks />
         <div style={{ marginTop: "12px", display: "flex", justifyContent: "center", gap: "16px" }}>
           <a href="/privacy" style={{ color: COLORS.lightText, textDecoration: "none" }}>Privacy Policy</a>
           <span>·</span>
