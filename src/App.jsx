@@ -720,13 +720,48 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
   Meet Your Assistants
 </a>
 </div>
+      {/* Agent Dashboard */}
+      <div id="assistants" style={{ maxWidth: "1040px", margin: "24px auto", padding: "0 16px" }}>
+        <div style={{ textAlign: "center", marginBottom: "24px" }}>
+          <h2 style={{ fontSize: "24px", color: COLORS.text, marginBottom: "6px" }}>Explore Sunny's specialized guides below — from lesson planning to finances, she can support both families and classrooms.</h2>
+          <p style={{ fontSize: "14px", color: COLORS.lightText }}>A flexible agent dashboard for everyday support, personalized guidance, and content creation. </p>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))", gap: "20px" }}>
+          {AGENTS.map(agent => (
+            <button key={agent.id} type="button" onClick={() => setActiveAgent(agent)} style={{
+              background: agent.light, border: `2px solid ${agent.color}`,
+              borderRadius: "16px", padding: "28px", minHeight: "200px", textAlign: "left",
+              cursor: "pointer", fontFamily: "Georgia, serif",
+              transition: "transform 0.15s, box-shadow 0.15s",
+            }}
+              onMouseOver={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 24px rgba(0,0,0,0.1)"; }}
+              onMouseOut={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}
+            >
+              <div style={{ fontSize: "40px", marginBottom: "8px" }}>{agent.icon}</div>
+              <div style={{ fontWeight: "bold", color: agent.color, fontSize: "20px", marginBottom: "8px" }}>{agent.name}</div>
+              <div style={{ fontSize: "15px", lineHeight: "1.6", color: COLORS.lightText, marginBottom: agentSummaries[agent.id] ? "8px" : "0" }}>{agent.tagline}</div>
+              <div style={{ fontSize: "13px", color: COLORS.text, background: "rgba(255,255,255,0.65)", borderRadius: "6px", padding: "6px 8px", lineHeight: "1.4" }}>
+                Open this guide and start a conversation.
+              </div>
+              {agentSummaries[agent.id] && (
+                <div style={{ fontSize: "13px", color: COLORS.text, background: "rgba(255,255,255,0.85)", borderRadius: "6px", padding: "6px 8px", lineHeight: "1.4", marginTop: "8px" }}>
+                  {agentSummaries[agent.id].slice(0, 60)}...
+                </div>
+              )}
+            </button>
+          ))}
+        </div>
+
+      </div>
+
       {/* Sunny Intake */}
-      <div style={{ maxWidth: "680px", margin: "24px auto", padding: "0 16px" }}>
+      <div style={{ maxWidth: "560px", margin: "24px auto", padding: "0 16px" }}>
         <div style={{
           background: "linear-gradient(135deg, #F7EFD9 0%, #F2E4C9 100%)",
-          border: `3px solid ${COLORS.border}`,
+          border: `2px solid ${COLORS.border}`,
           borderRadius: "24px",
-          padding: "32px",
+          padding: "20px",
           boxShadow: "0 12px 32px rgba(0,0,0,0.08)",
         }}>
           <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", gap: "16px", marginBottom: "20px" }}>
@@ -744,10 +779,10 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
               }}>
                 Featured moment builder
               </div>
-              <h2 style={{ fontSize: "28px", color: COLORS.text, marginBottom: "8px", fontWeight: "bold", lineHeight: "1.2" }}>
+              <h2 style={{ fontSize: "22px", color: COLORS.text, marginBottom: "8px", fontWeight: "bold", lineHeight: "1.2" }}>
                 Create a calm, joyful moment for your child in minutes.
               </h2>
-              <p style={{ fontSize: "15px", color: COLORS.lightText, lineHeight: "1.7", margin: 0 }}>
+              <p style={{ fontSize: "14px", color: COLORS.lightText, lineHeight: "1.7", margin: 0 }}>
                 Sunny turns a few simple details into two playful ideas you can start right away.
               </p>
             </div>
@@ -812,15 +847,15 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
         {showChat && (
           <div style={{ background: COLORS.white, border: `2px solid ${COLORS.border}`, borderRadius: "16px", padding: "24px", marginTop: "16px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "16px" }}>
-              <span style={{ fontSize: "28px" }}>🌿</span>
+              <span style={{ fontSize: "22px" }}>🌿</span>
               <div>
-                <div style={{ fontWeight: "bold", color: COLORS.text, fontSize: "15px" }}>Sunny</div>
+                <div style={{ fontWeight: "bold", color: COLORS.text, fontSize: "14px" }}>Sunny</div>
                 <div style={{ fontSize: "12px", color: COLORS.lightText }}>Your activity guide</div>
               </div>
             </div>
             {messages.map((msg, i) => {
               if (msg.role === "assistant") return (
-                <div key={i} style={{ fontSize: "15px", color: COLORS.text, lineHeight: "1.8", marginBottom: "16px", whiteSpace: "pre-wrap" }}>
+                <div key={i} style={{ fontSize: "14px", color: COLORS.text, lineHeight: "1.8", marginBottom: "16px", whiteSpace: "pre-wrap" }}>
                   {msg.content}
                 </div>
               );
@@ -858,39 +893,7 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
         )}
       </div>
 
-      {/* Agent Dashboard */}
-      <div id="assistants" style={{ maxWidth: "760px", margin: "40px auto", padding: "0 16px" }}>
-        <div style={{ textAlign: "center", marginBottom: "24px" }}>
-          <h2 style={{ fontSize: "24px", color: COLORS.text, marginBottom: "6px" }}>Explore Sunny's specialized guides below — from lesson planning to finances, she can support both families and classrooms.</h2>
-          <p style={{ fontSize: "14px", color: COLORS.lightText }}>A flexible agent dashboard for everyday support, personalized guidance, and content creation. </p>
-        </div>
-
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px" }}>
-          {AGENTS.map(agent => (
-            <button key={agent.id} type="button" onClick={() => setActiveAgent(agent)} style={{
-              background: agent.light, border: `2px solid ${agent.color}`,
-              borderRadius: "16px", padding: "20px", textAlign: "left",
-              cursor: "pointer", fontFamily: "Georgia, serif",
-              transition: "transform 0.15s, box-shadow 0.15s",
-            }}
-              onMouseOver={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 24px rgba(0,0,0,0.1)"; }}
-              onMouseOut={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}
-            >
-              <div style={{ fontSize: "32px", marginBottom: "8px" }}>{agent.icon}</div>
-              <div style={{ fontWeight: "bold", color: agent.color, fontSize: "16px", marginBottom: "4px" }}>{agent.name}</div>
-              <div style={{ fontSize: "12px", color: COLORS.lightText, marginBottom: agentSummaries[agent.id] ? "8px" : "0" }}>{agent.tagline}</div>
-              <div style={{ fontSize: "11px", color: COLORS.text, background: "rgba(255,255,255,0.65)", borderRadius: "6px", padding: "6px 8px", lineHeight: "1.4" }}>
-                Open this guide and start a conversation.
-              </div>
-              {agentSummaries[agent.id] && (
-                <div style={{ fontSize: "11px", color: COLORS.text, background: "rgba(255,255,255,0.85)", borderRadius: "6px", padding: "6px 8px", lineHeight: "1.4", marginTop: "8px" }}>
-                  {agentSummaries[agent.id].slice(0, 60)}...
-                </div>
-              )}
-            </button>
-          ))}
-        </div>
-
+      <div style={{ maxWidth: "760px", margin: "32px auto", padding: "0 16px" }}>
         {/* Child Profiles */}
         <div style={{ marginTop: "32px" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
