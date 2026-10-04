@@ -714,7 +714,7 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
 </h1>
 
 <p style={{ fontSize: "16px", color: COLORS.lightText, minHeight: "24px" }}>
-  Nine AI assistants for your everyday life, plus one dedicated to your baby’s growth.
+  <RotatingTagline />
 </p>
 <a href="#assistants" style={{ display: "inline-block", background: COLORS.button, color: "#FFF8F0", padding: "12px 24px", borderRadius: "8px", textDecoration: "none", marginTop: "12px" }}>
   Meet Your Assistants
