@@ -105,7 +105,7 @@ const AGENTS = [
   {
     id: "lesson-plans",
     icon: "📘",
-    name: "Lesson Planner",
+    name: "Educational Tools",
     tagline: "Build plans by student",
     color: "#5B4B8A",
     light: "#EFE8FF",
@@ -723,7 +723,7 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
       {/* Agent Dashboard */}
       <div id="assistants" style={{ maxWidth: "1040px", margin: "24px auto", padding: "0 16px" }}>
         <div style={{ textAlign: "center", marginBottom: "24px" }}>
-          <h2 style={{ fontSize: "24px", color: COLORS.text, marginBottom: "6px" }}>Explore Sunny's specialized guides below — from lesson planning to finances, she can support both families and classrooms.</h2>
+          <h2 style={{ fontSize: "24px", color: COLORS.text, marginBottom: "6px" }}>Explore Sunny's specialized guides below — Everything You Need</h2>
           <p style={{ fontSize: "14px", color: COLORS.lightText }}>A flexible agent dashboard for everyday support, personalized guidance, and content creation. </p>
         </div>
 
