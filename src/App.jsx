@@ -710,12 +710,15 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
           fontSize: "64px", boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
         }}>🌸</div>
         <h1 style={{ fontSize: "clamp(28px, 5vw, 48px)", color: COLORS.text, marginBottom: "8px" }}>
-  Dedicated Mother
+  Organise Your Life, Without the Drama.
 </h1>
 
 <p style={{ fontSize: "16px", color: COLORS.lightText, minHeight: "24px" }}>
-  <RotatingTagline />
+  Nine AI assistants for your everyday life, plus one dedicated to your baby’s growth.
 </p>
+<a href="#assistants" style={{ display: "inline-block", background: COLORS.button, color: "#FFF8F0", padding: "12px 24px", borderRadius: "8px", textDecoration: "none", marginTop: "12px" }}>
+  Meet Your Assistants
+</a>
 </div>
       {/* Sunny Intake */}
       <div style={{ maxWidth: "680px", margin: "24px auto", padding: "0 16px" }}>
@@ -856,7 +859,7 @@ Keep your tone warm, short, and friendly. Steps should be very brief — one sen
       </div>
 
       {/* Agent Dashboard */}
-      <div style={{ maxWidth: "760px", margin: "40px auto", padding: "0 16px" }}>
+      <div id="assistants" style={{ maxWidth: "760px", margin: "40px auto", padding: "0 16px" }}>
         <div style={{ textAlign: "center", marginBottom: "24px" }}>
           <h2 style={{ fontSize: "24px", color: COLORS.text, marginBottom: "6px" }}>Explore Sunny's specialized guides below — from lesson planning to finances, she can support both families and classrooms.</h2>
           <p style={{ fontSize: "14px", color: COLORS.lightText }}>A flexible agent dashboard for everyday support, personalized guidance, and content creation. </p>
